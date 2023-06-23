@@ -13,7 +13,6 @@
   ansible.builtin.apt:
     name:
       - gnupg
-      - python3-jmespath
     state: present
     update_cache: true
     cache_valid_time: 3600

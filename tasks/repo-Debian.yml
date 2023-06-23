@@ -9,6 +9,14 @@
     purge: true
   notify: "Update apt cache (Debian Family)"
 
+- name: "Ensure gnupg is installed (Debian Family)"
+  ansible.builtin.apt:
+    name: gnupg
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+
 - name: "Add netdata repository"
   when: netdata_state == "present"
   notify: "Update apt cache (Debian Family)"

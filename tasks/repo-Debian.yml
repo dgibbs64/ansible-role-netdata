@@ -9,9 +9,11 @@
     purge: true
   notify: "Update apt cache (Debian Family)"
 
-- name: "Ensure gnupg is installed (Debian Family)"
+- name: "Ensure gnupg and python3-jmespath is installed (Debian Family)"
   ansible.builtin.apt:
-    name: gnupg
+    name:
+      - gnupg
+      - python3-jmespath
     state: present
     update_cache: true
     cache_valid_time: 3600

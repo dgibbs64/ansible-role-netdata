@@ -3,9 +3,15 @@ name: Ansible Molecule
 on:
   workflow_dispatch:
   push:
+    branches-ignore:
+      - repo-sync*
   pull_request:
   schedule:
     - cron: "16 0 * * 0"
+
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -44,7 +50,7 @@ jobs:
           - centos7
           - debian10
           - debian11
-          - debian9
+          - debian12
           - fedora36
           - fedora37
           - fedora38

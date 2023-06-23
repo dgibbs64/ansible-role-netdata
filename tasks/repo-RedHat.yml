@@ -1,0 +1,117 @@
+---
+- name: "Set netdata_el_repo_distro (EL Family)"
+  ansible.builtin.set_fact:
+    netdata_el_repo_distro: el
+
+- name: "Set netdata_el_repo_distro (Oracle Linux)"
+  ansible.builtin.set_fact:
+    netdata_el_repo_distro: ol
+  when: ansible_distribution == "OracleLinux"
+
+- name: "Set netdata_el_repo_distro (Fedora)"
+  ansible.builtin.set_fact:
+    netdata_el_repo_distro: fedora
+  when: ansible_distribution == "Fedora"
+
+- name: "Set netdata_el_repo_distro (Amazon Linux)"
+  ansible.builtin.set_fact:
+    netdata_el_repo_distro: amazonlinux
+  when: ansible_distribution == "Amazon"
+
+- name: "Ensure netdata-repo is removed (EL Family)"
+  ansible.builtin.yum:
+    name:
+      - netdata-repo
+      - netdata-repo-edge
+    state: absent
+
+- name: "Add netdata repository"
+  when: netdata_state == "present"
+  block:
+    - name: "Ensure netdata repo key is present (EL Family)"
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://repo.netdata.cloud/netdatabot.gpg.key
+
+    - name: "Ensure netdata repository is configured (EL Family) [{{ netdata_channel }}]"
+      ansible.builtin.yum_repository:
+        baseurl: https://repo.netdata.cloud/repos/{{ netdata_channel }}/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
+        description: Netdata {{ netdata_channel }}
+        state: present
+        enabled: true
+        file: netdata-{{ netdata_channel }}
+        gpgcheck: true
+        gpgkey: https://repo.netdata.cloud/netdatabot.gpg.key
+        name: netdata-{{ netdata_channel }}
+        priority: 50
+        repo_gpgcheck: true
+        sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+        sslverify: true
+
+    # Ensure that either stable or edge repo is removed
+    - name: "Set fact netdata_channel_remove to edge"
+      ansible.builtin.set_fact:
+        netdata_channel_remove: edge
+      when: netdata_channel == "stable"
+
+    - name: "Set fact netdata_channel_remove to stable"
+      ansible.builtin.set_fact:
+        netdata_channel_remove: stable
+      when: netdata_channel == "edge"
+
+    - name: "Ensure netdata repository is removed (EL Family) [{{ netdata_channel_remove }}]"
+      ansible.builtin.yum_repository:
+        baseurl: https://repo.netdata.cloud/repos/{{ netdata_channel_remove }}/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
+        description: Netdata {{ netdata_channel_remove }}
+        state: absent
+        enabled: true
+        file: netdata-{{ netdata_channel_remove }}
+        gpgcheck: true
+        gpgkey: https://repo.netdata.cloud/netdatabot.gpg.key
+        name: netdata-{{ netdata_channel_remove }}
+        priority: 50
+        repo_gpgcheck: true
+        sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+        sslverify: true
+      notify: "Remove netdata"
+
+- name: "Remove netdata repository"
+  when: netdata_state == "absent"
+  block:
+    - name: "Ensure netdata repository is removed (EL Family) [stable]"
+      ansible.builtin.yum_repository:
+        baseurl: https://repo.netdata.cloud/repos/stable/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
+        description: Netdata stable
+        state: absent
+        enabled: true
+        file: netdata-stable
+        gpgcheck: true
+        gpgkey: https://repo.netdata.cloud/netdatabot.gpg.key
+        name: netdata-stable
+        priority: 50
+        repo_gpgcheck: true
+        sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+        sslverify: true
+
+    - name: "Ensure netdata repository is removed (EL Family) [edge]"
+      ansible.builtin.yum_repository:
+        baseurl: https://repo.netdata.cloud/repos/edge/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
+        description: Netdata edge
+        state: absent
+        enabled: true
+        file: netdata-edge
+        gpgcheck: true
+        gpgkey: https://repo.netdata.cloud/netdatabot.gpg.key
+        name: netdata-edge
+        priority: 50
+        repo_gpgcheck: true
+        sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+        sslverify: true
+
+    - name: "Ensure netdata repo key is removed (EL Family)"
+      ansible.builtin.rpm_key:
+        state: absent
+        key: https://repo.netdata.cloud/netdatabot.gpg.key
+
+- name: "Flush handlers"
+  ansible.builtin.meta: flush_handlers

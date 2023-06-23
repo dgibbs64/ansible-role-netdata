@@ -1,0 +1,31 @@
+---
+- name: "Ensure netdata user is present"
+  ansible.builtin.user:
+    name: netdata
+    comment: "Netdata Monitoring"
+    shell: /sbin/nologin
+    system: true
+    createhome: false
+    home: /var/lib/netdata
+    state: present
+
+- name: "Ensure netdata is installed (Debian Family)"
+  ansible.builtin.apt:
+    name:
+      - uuid-runtime
+      - netdata
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+
+- name: "Ensure netdata is installed"
+  ansible.builtin.package:
+    name: netdata
+    state: present
+  when: ansible_os_family != "Debian"
+
+- name: "Ensure netdata is started"
+  ansible.builtin.service:
+    name: netdata
+    state: started

@@ -1,0 +1,25 @@
+---
+# handlers file for netdata
+
+- name: "Restart netdata"
+  become: true
+  ansible.builtin.service:
+    name: netdata
+    state: restarted
+
+- name: "Remove netdata"
+  become: true
+  ansible.builtin.package:
+    name: netdata
+    state: absent
+
+- name: "Remove netdata zypper"
+  become: true
+  community.general.zypper:
+    name: netdata
+    state: absent
+
+- name: "Update apt cache (Debian Family)"
+  become: true
+  ansible.builtin.apt:
+    update_cache: true

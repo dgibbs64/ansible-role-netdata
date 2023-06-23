@@ -1,0 +1,74 @@
+---
+- name: "Ensure netdata-repo is removed (SUSE)"
+  community.general.zypper:
+    name:
+      - netdata-repo
+      - netdata-repo-edge
+    state: absent
+
+- name: "Add netdata repository"
+  when: netdata_state == "present"
+  block:
+    - name: "Ensure netdata repo key is present (SUSE)"
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://repo.netdata.cloud/netdatabot.gpg.key
+
+    - name: "Ensure netdata repository is configured (SUSE) [{{ netdata_channel }}]"
+      community.general.zypper_repository:
+        repo: https://repo.netdata.cloud/repos/{{ netdata_channel }}/opensuse/{{ ansible_distribution_version }}/{{ ansible_architecture }}/
+        description: Netdata {{ netdata_channel }}
+        state: present
+        enabled: true
+        name: netdata-{{ netdata_channel }}
+        priority: 50
+
+    # Ensure that either stable or edge repo is removed
+    - name: "Set fact netdata_channel_remove to edge"
+      ansible.builtin.set_fact:
+        netdata_channel_remove: edge
+      when: netdata_channel == "stable"
+
+    - name: "Set fact netdata_channel_remove to stable"
+      ansible.builtin.set_fact:
+        netdata_channel_remove: stable
+      when: netdata_channel == "edge"
+
+    - name: "Ensure netdata repository is removed (SUSE) [{{ netdata_channel_remove }}]"
+      community.general.zypper_repository:
+        repo: https://repo.netdata.cloud/repos/{{ netdata_channel_remove }}/opensuse/{{ ansible_distribution_version }}/{{ ansible_architecture }}/
+        description: Netdata {{ netdata_channel_remove }}
+        state: absent
+        enabled: true
+        name: netdata-{{ netdata_channel_remove }}
+        priority: 50
+      notify: "Remove netdata zypper"
+
+- name: "Remove netdata repository"
+  when: netdata_state == "absent"
+  block:
+    - name: "Ensure netdata repository is removed (SUSE) [stable]"
+      community.general.zypper_repository:
+        repo: https://repo.netdata.cloud/repos/stable/opensuse/{{ ansible_distribution_version }}/{{ ansible_architecture }}/
+        description: Netdata stable
+        state: absent
+        enabled: true
+        name: netdata-stable
+        priority: 50
+
+    - name: "Ensure netdata repository is removed (SUSE) [edge]"
+      community.general.zypper_repository:
+        repo: https://repo.netdata.cloud/repos/edge/opensuse/{{ ansible_distribution_version }}/{{ ansible_architecture }}/
+        description: Netdata edge
+        state: absent
+        enabled: true
+        name: netdata-edge
+        priority: 50
+
+    - name: "Ensure netdata repo key is removed (SUSE)"
+      ansible.builtin.rpm_key:
+        state: absent
+        key: https://repo.netdata.cloud/netdatabot.gpg.key
+
+- name: "Flush handlers"
+  ansible.builtin.meta: flush_handlers

@@ -1,0 +1,81 @@
+---
+- name: "Get information about netdata agent"
+  when: not netdata_force_claim
+  block:
+    - name: "Get information about netdata agent"
+      ansible.builtin.command: netdatacli aclk-state json
+      register: netdata_agent_info
+      changed_when: false
+  rescue:
+    - name: "Restart netdata"
+      ansible.builtin.service:
+        name: netdata
+        state: restarted
+
+    - name: "Get information about netdata agent"
+      ansible.builtin.command: netdatacli aclk-state json
+      register: netdata_agent_info
+      changed_when: false
+
+- name: "Set if the netdata agent is claimed"
+  ansible.builtin.set_fact:
+    netdata_is_claimed: '{{ netdata_agent_info.stdout | from_json | json_query(''"agent-claimed"'') }}'
+  when: not netdata_force_claim
+
+# Room ID
+- name: "Check room_id matches"
+  block:
+    - name: "Ensure that netdata_claim_room_id matches the stored host room_id"
+      ansible.builtin.lineinfile:
+        dest: /etc/netdata/room_id
+        line: "{{ netdata_claim_room_id }}"
+      check_mode: true
+      register: netdata_claim_room_id_diff
+      changed_when: netdata_claim_room_id_diff.changed
+  rescue:
+    - name: "Ensure /etc/netdata/room_id exists"
+      ansible.builtin.file:
+        path: "/etc/netdata/room_id"
+        state: touch
+        owner: "root"
+        group: "root"
+        mode: "0644"
+
+    - name: "Ensure netdata_claim_room_id is added to /etc/netdata/room_id"
+      ansible.builtin.lineinfile:
+        dest: /etc/netdata/room_id
+        line: "{{ netdata_claim_room_id }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      register: netdata_claim_room_id_file_missing
+
+- name: "Set netdata_force_claim if room_id does not match"
+  ansible.builtin.set_fact:
+    netdata_force_claim: true
+  when: netdata_claim_room_id_diff.changed or netdata_claim_room_id_file_missing is defined
+
+- name: "Ensure node is claimed"
+  when: netdata_force_claim or not netdata_is_claimed
+  block:
+    - name: "Generate UUID"
+      ansible.builtin.command: uuidgen
+      register: netdata_uuidgen
+      changed_when: true
+
+    - name: "Set fact netdata_uuid"
+      ansible.builtin.set_fact:
+        netdata_uuid: "{{ netdata_uuidgen.stdout }}"
+
+    - name: "Claim the node"
+      ansible.builtin.command: netdata-claim.sh -token="{{ netdata_claim_token }}" -rooms="{{ netdata_claim_room_id }}" -url="{{ netdata_claim_url }}" -id="{{ netdata_uuid }}"
+      notify: Restart netdata
+      changed_when: true
+
+    - name: "Ensure netdata_claim_room_id is added to /etc/netdata/room_id"
+      ansible.builtin.lineinfile:
+        dest: /etc/netdata/room_id
+        line: "{{ netdata_claim_room_id }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"

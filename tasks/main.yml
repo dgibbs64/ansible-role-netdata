@@ -1,0 +1,37 @@
+---
+# tasks file for netdata
+
+- name: "Gather facts"
+  ansible.builtin.setup:
+  when: ansible_facts|default({}) == {}
+
+- name: "Become block"
+  become: true
+  block:
+    - name: "Remove netdata"
+      ansible.builtin.include_tasks: remove.yml
+      when: netdata_state == "absent"
+
+    - name: "Configure repository (Debian Family)"
+      ansible.builtin.include_tasks: repo-Debian.yml
+      when: ansible_os_family == "Debian"
+
+    - name: "Configure repository (EL Family)"
+      ansible.builtin.include_tasks: repo-RedHat.yml
+      when: ansible_os_family == "RedHat"
+
+    - name: "Configure repository (Suse)"
+      ansible.builtin.include_tasks: repo-Suse.yml
+      when: ansible_os_family == "Suse"
+
+    - name: "Install"
+      ansible.builtin.include_tasks: install.yml
+      when: netdata_state == "present"
+
+    - name: "Configure netdata"
+      ansible.builtin.include_tasks: config.yml
+      when: netdata_state == "present"
+
+    - name: "Claim host"
+      ansible.builtin.include_tasks: claim.yml
+      when: netdata_state == "present"

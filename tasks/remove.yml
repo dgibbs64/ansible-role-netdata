@@ -1,0 +1,51 @@
+---
+- name: "Get service facts"
+  ansible.builtin.service_facts:
+
+- name: "Stop netdata"
+  ansible.builtin.service:
+    name: netdata
+    state: stopped
+  when: "'netdata' in services"
+
+- name: "Ensure netdata is removed (Debian Family)"
+  ansible.builtin.apt:
+    name: netdata*
+    state: absent
+    purge: true
+  when: ansible_os_family == "Debian"
+
+- name: "Ensure netdata is removed (openSUSE)"
+  community.general.zypper:
+    name: netdata
+    state: absent
+  when: ansible_os_family == "Suse"
+
+- name: "Ensure netdata is removed"
+  ansible.builtin.package:
+    name: netdata*
+    state: absent
+  when: ansible_os_family != "Debian" or ansible_os_family != "Suse"
+
+- name: "Remove remaining netdata files"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/netdata
+    - /var/log/netdata
+    - /var/lib/netdata
+    - /var/cache/netdata
+    - /usr/libexec/netdata
+    - /usr/lib/netdata
+    - /usr/share/netdata
+
+- name: "Ensure netdata user is removed"
+  ansible.builtin.user:
+    name: netdata
+    comment: "Netdata Monitoring"
+    shell: /sbin/nologin
+    system: true
+    createhome: false
+    home: /var/lib/netdata
+    state: absent

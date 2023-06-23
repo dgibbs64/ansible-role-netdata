@@ -1,0 +1,15 @@
+---
+# defaults file for netdata
+
+netdata_channel: stable
+netdata_claim_token:
+netdata_claim_room_id:
+netdata_claim_url: https://app.netdata.cloud
+netdata_force_claim: false
+netdata_state: present
+netdata_conf_template: netdata.conf.j2
+# static-threaded
+netdata_web_mode: none
+netdata_web_port: 19999
+netdata_web_bind_to:
+netdata_web_allow_from:

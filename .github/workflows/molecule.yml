@@ -77,3 +77,5 @@ jobs:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_IMAGE: "${{ matrix.distro }}"
+          CLAIM_TOKEN: "${{ secrets.CLAIM_TOKEN }}"
+          CLAIM_ROOM_ID: "${{ secrets.CLAIM_ROOM_ID }}"

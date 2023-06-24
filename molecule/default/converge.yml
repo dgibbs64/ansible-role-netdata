@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: false
   vars:
-    netdata_claim_token: ${{ secrets.CLAIM_TOKEN }}
-    netdata_claim_room_id: ${{ secrets.CLAIM_ROOM_ID }}
+    netdata_claim_token: "{{ lookup('env', 'CLAIM_TOKEN') }}"
+    netdata_claim_room_id: "{{ lookup('env', 'CLAIM_ROOM_ID') }}"
   roles:
     - role: "dgibbs64.netdata"

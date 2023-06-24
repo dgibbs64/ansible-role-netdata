@@ -1,0 +1,8 @@
+---
+- name: "Converge"
+  hosts: all
+  gather_facts: false
+  vars:
+    netdata_agent_state: absent
+  roles:
+    - role: "dgibbs64.netdata"

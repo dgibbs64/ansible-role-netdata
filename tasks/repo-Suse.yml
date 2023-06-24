@@ -47,7 +47,7 @@
 - name: "Remove netdata repository"
   when: netdata_agent_state == "absent"
   block:
-    - name: "Ensure netdata repository is removed (SUSE) [stable]"
+    - name: "Ensure netdata repository is removed [stable] (SUSE)"
       community.general.zypper_repository:
         repo: https://repo.netdata.cloud/repos/stable/opensuse/{{ ansible_distribution_version }}/{{ ansible_architecture }}/
         description: Netdata stable

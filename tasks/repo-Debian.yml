@@ -53,13 +53,13 @@
   when: netdata_agent_state == "absent"
   notify: "Update apt cache (Debian Family)"
   block:
-    - name: "Ensure netdata repository is removed (Debian Family) [stable]"
+    - name: "Ensure netdata repository is removed [stable] (Debian Family)"
       ansible.builtin.apt_repository:
         repo: "deb http://repo.netdata.cloud/repos/stable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
         state: absent
         filename: netdata-stable
 
-    - name: "Ensure netdata repository is removed (Debian Family) [edge]"
+    - name: "Ensure netdata repository is removed [edge] (Debian Family)"
       ansible.builtin.apt_repository:
         repo: "deb http://repo.netdata.cloud/repos/edge}/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
         state: absent

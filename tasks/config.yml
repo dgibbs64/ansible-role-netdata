@@ -7,3 +7,6 @@
     group: "root"
     mode: "0644"
   notify: Restart netdata
+
+- name: "Flush handlers"
+  ansible.builtin.meta: flush_handlers

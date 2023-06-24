@@ -1,0 +1,20 @@
+---
+- name: "Verify"
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: "Get service facts"
+      ansible.builtin.service_facts:
+
+    - name: "Check netdata service is started"
+      fail:
+        msg: "Netdata service is stopped"
+      when: "'netdata' in services and services['netdata']['state'] == 'stopped'"
+
+    - name: "Check netdata dashboard port to open"
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: "19999"
+        state: started
+        delay: 1
+        timeout: 10

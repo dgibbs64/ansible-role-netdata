@@ -78,7 +78,7 @@
 - name: "Remove netdata repository"
   when: netdata_agent_state == "absent"
   block:
-    - name: "Ensure netdata repository is removed (EL Family) [stable]"
+    - name: "Ensure netdata repository is removed [stable] (EL Family)"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/stable/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata stable
@@ -93,7 +93,7 @@
         sslcacert: /etc/pki/tls/certs/ca-bundle.crt
         sslverify: true
 
-    - name: "Ensure netdata repository is removed (EL Family) [edge]"
+    - name: "Ensure netdata repository is removed [edge] (EL Family)"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/edge/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata edge

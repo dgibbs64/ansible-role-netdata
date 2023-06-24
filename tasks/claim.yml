@@ -62,17 +62,18 @@
       ansible.builtin.command: uuidgen
       register: netdata_uuidgen
       changed_when: true
+      tags: "molecule-notest"
 
     - name: "Set fact netdata_uuid"
       ansible.builtin.set_fact:
         netdata_uuid: "{{ netdata_uuidgen.stdout }}"
+      tags: "molecule-notest"
 
     - name: "Claim the node"
       ansible.builtin.command: netdata-claim.sh -token="{{ netdata_cloud_claim_token }}" -rooms="{{ netdata_cloud_claim_room_id }}" -url="{{ netdata_cloud_claim_url }}" -id="{{ netdata_uuid }}"
       notify: Restart netdata
       changed_when: true
-      tags:
-        - "molecule-notest"
+      tags: "molecule-notest"
 
     - name: "Ensure netdata_cloud_claim_room_id is added to /etc/netdata/room_id"
       ansible.builtin.lineinfile:

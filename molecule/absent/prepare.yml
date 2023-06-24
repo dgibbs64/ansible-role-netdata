@@ -2,6 +2,5 @@
 - name: "Prepare"
   hosts: all
   gather_facts: false
-  vars:
   roles:
     - role: "dgibbs64.netdata"

@@ -7,12 +7,12 @@
       ansible.builtin.service_facts:
 
     - name: "Check netdata service is started"
-      fail:
+      ansible.builtin.fail:
         msg: "Netdata service is started"
       when: "'netdata' in services and services['netdata']['state'] == 'started'"
 
     - name: "Check netdata dashboard port to closed"
-      wait_for:
+      ansible.builtin.wait_for:
         host: "{{ inventory_hostname }}"
         port: "19999"
         state: stopped

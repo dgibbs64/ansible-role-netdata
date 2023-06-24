@@ -25,7 +25,6 @@
     name:
       - util-linux
       - openssl
-      - curl
     state: present
   when: ansible_os_family == "RedHat"
 

@@ -23,6 +23,7 @@
   ansible.builtin.yum:
     name:
       - util-linux
+      - openssl
     state: present
   when: ansible_os_family == "RedHat"
 

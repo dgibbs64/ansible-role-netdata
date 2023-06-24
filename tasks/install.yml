@@ -19,6 +19,13 @@
     cache_valid_time: 3600
   when: ansible_os_family == "Debian"
 
+- name: "Ensure util-linux is installed (RedHat Family)"
+  ansible.builtin.yum:
+    name:
+      - util-linux
+    state: present
+  when: ansible_os_family == "RedHat"
+
 - name: "Ensure netdata is installed"
   ansible.builtin.package:
     name: netdata

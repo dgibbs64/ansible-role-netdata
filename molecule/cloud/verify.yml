@@ -16,7 +16,7 @@
         host: "{{ inventory_hostname }}"
         port: "19999"
         state: stopped
-        delay: 1
+        delay: 5
         timeout: 10
       register: result
 

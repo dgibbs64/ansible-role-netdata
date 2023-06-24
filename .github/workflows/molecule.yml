@@ -6,6 +6,8 @@ on:
     branches-ignore:
       - repo-sync/**
   pull_request:
+    branches-ignore:
+      - repo-sync/**
   schedule:
     - cron: "16 0 * * 0"
 
@@ -54,7 +56,6 @@ jobs:
           - fedora38
           - rockylinux8
           - rockylinux9
-          - ubi8
           - ubuntu1804
           - ubuntu2004
           - ubuntu2204
@@ -71,7 +72,7 @@ jobs:
       - name: Secrets to env
         uses: oNaiPs/secrets-to-env-action@v1
         with:
-          secrets: ${{ toJSON(secrets) }}
+          secrets: "${{ toJSON(secrets) }}"
 
       - name: Run Molecule tests
         run: molecule test

@@ -6,7 +6,7 @@
     - name: "Get service facts"
       ansible.builtin.service_facts:
 
-    - name: "Check netdata service is started"
+    - name: "Check netdata service is stopped"
       ansible.builtin.fail:
         msg: "Netdata service is started"
       when: "'netdata' in services and services['netdata']['state'] == 'started'"

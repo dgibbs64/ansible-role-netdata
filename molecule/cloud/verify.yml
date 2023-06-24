@@ -11,15 +11,10 @@
         msg: "Netdata service is stopped"
       when: "'netdata' in services and services['netdata']['state'] == 'stopped'"
 
-    - name: "Wait for netdata dashboard port to open"
+    - name: "Check netdata dashboard port to closed"
       ansible.builtin.wait_for:
         host: "{{ inventory_hostname }}"
         port: "19999"
         state: stopped
         delay: 5
         timeout: 10
-      register: result
-
-    - name: "Print port status"
-      ansible.builtin.debug:
-        msg: "Port 19999 is open: {{ result.elapsed }}"

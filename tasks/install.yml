@@ -26,6 +26,7 @@
       - util-linux
       - openssl
       - protobuf
+      - dbus
     state: present
   when: ansible_os_family == "RedHat"
 

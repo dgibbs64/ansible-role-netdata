@@ -37,7 +37,7 @@
   when: ansible_os_family != "Debian"
 
 - name: "Ensure dbus is started"
-  ansible.builtin.systemctl:
+  ansible.builtin.systemd:
     name: dbus
     state: started
 

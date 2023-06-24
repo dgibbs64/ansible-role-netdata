@@ -14,6 +14,7 @@
     name:
       - uuid-runtime
       - netdata
+      - curl
     state: present
     update_cache: true
     cache_valid_time: 3600
@@ -24,6 +25,7 @@
     name:
       - util-linux
       - openssl
+      - curl
     state: present
   when: ansible_os_family == "RedHat"
 

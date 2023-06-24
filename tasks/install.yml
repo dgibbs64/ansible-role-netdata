@@ -36,8 +36,8 @@
     state: present
   when: ansible_os_family != "Debian"
 
-- name: "Ensure netdata is started"
-  ansible.builtin.service:
+- name: "Ensure dbus is started"
+  ansible.builtin.systemctl:
     name: dbus
     state: started
 

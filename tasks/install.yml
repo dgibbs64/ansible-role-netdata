@@ -26,7 +26,6 @@
       - util-linux
       - openssl
       - protobuf
-      - dbus
     state: present
   when: ansible_os_family == "RedHat"
 
@@ -35,11 +34,6 @@
     name: netdata
     state: present
   when: ansible_os_family != "Debian"
-
-- name: "Ensure dbus is started"
-  ansible.builtin.systemd:
-    name: dbus
-    state: started
 
 - name: "Ensure netdata is started"
   ansible.builtin.service:

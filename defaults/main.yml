@@ -1,15 +1,27 @@
 ---
 # defaults file for netdata
 
-netdata_channel: stable
-netdata_claim_token:
-netdata_claim_room_id:
-netdata_claim_url: https://app.netdata.cloud
-netdata_force_claim: false
-netdata_state: present
-netdata_conf_template: netdata.conf.j2
-# static-threaded
-netdata_web_mode: none
-netdata_web_port: 19999
-netdata_web_bind_to:
-netdata_web_allow_from:
+# Netdata cloud
+# https://learn.netdata.cloud/docs/installing/install-with-a-cicd-provisioning-system/ansible#edit-the-varsmainyml-file
+netdata_cloud_enable: false
+netdata_cloud_claim_url: https://app.netdata.cloud
+netdata_cloud_claim_token:
+netdata_cloud_claim_room_id:
+netdata_cloud_force_claim: false
+
+# Netdata agent
+# Channel stable|edge
+netdata_agent_channel: stable
+
+# Agent state present|absent
+netdata_agent_state: present
+
+# netdata.conf template location
+netdata_agent_conf_template: netdata.conf.j2
+
+## Netdata agent web dashboard
+# https://learn.netdata.cloud/docs/configuring/securing-netdata-agents/
+netdata_agent_web_enabled: true
+netdata_agent_web_port: 19999
+netdata_agent_web_bind_to:
+netdata_agent_web_allow_from:

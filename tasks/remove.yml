@@ -40,7 +40,7 @@
     - /usr/lib/netdata
     - /usr/share/netdata
 
-- name: "Ensure netdata user is removed"
+- name: "Ensure netdata service user is removed"
   ansible.builtin.user:
     name: netdata
     comment: "Netdata Monitoring"

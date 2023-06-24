@@ -8,9 +8,12 @@
 - name: "Become block"
   become: true
   block:
+    - name: "Assert"
+      ansible.builtin.include_tasks: assert.yml
+
     - name: "Remove netdata"
       ansible.builtin.include_tasks: remove.yml
-      when: netdata_state == "absent"
+      when: netdata_agent_state == "absent"
 
     - name: "Configure repository (Debian Family)"
       ansible.builtin.include_tasks: repo-Debian.yml
@@ -26,12 +29,12 @@
 
     - name: "Install"
       ansible.builtin.include_tasks: install.yml
-      when: netdata_state == "present"
+      when: netdata_agent_state == "present"
 
     - name: "Configure netdata"
       ansible.builtin.include_tasks: config.yml
-      when: netdata_state == "present"
+      when: netdata_agent_state == "present"
 
     - name: "Claim host"
       ansible.builtin.include_tasks: claim.yml
-      when: netdata_state == "present"
+      when: netdata_agent_state == "present" and netdata_cloud_enable

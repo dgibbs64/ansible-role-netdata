@@ -22,11 +22,17 @@
     dbengine multihost disk space = 256
 
 [web]
-    mode = {{ netdata_web_mode }}
-    default port = {{ netdata_web_port }}
-{% if netdata_web_bind_to is defined and variable is not none %}
-    bind to = {{ netdata_web_bind_to }}
+{% if netdata_agent_web_enabled is defined and variable is not none %}
+    mode = static-threaded
+{% if netdata_agent_web_port is defined and variable is not none %}
+    default port = {{ netdata_agent_web_port }}
 {% endif %}
-{% if netdata_web_allow_from is defined and variable is not none %}
-    allow connections from = {{ netdata_web_allow_from }}
+{% if netdata_agent_web_bind_to is defined and variable is not none %}
+    bind to = {{ netdata_agent_web_bind_to }}
+{% endif %}
+{% if netdata_agent_web_allow_from is defined and variable is not none %}
+    allow connections from = {{ netdata_agent_web_allow_from }}
+{% endif %}
+{% else %}
+    mode = none
 {% endif %}

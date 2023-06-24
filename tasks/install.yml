@@ -1,5 +1,5 @@
 ---
-- name: "Ensure netdata user is present"
+- name: "Ensure netdata service user is present"
   ansible.builtin.user:
     name: netdata
     comment: "Netdata Monitoring"
@@ -20,7 +20,7 @@
     cache_valid_time: 3600
   when: ansible_os_family == "Debian"
 
-- name: "Ensure util-linux is installed (RedHat Family)"
+- name: "Ensure netdata dependencies are installed (RedHat Family)"
   ansible.builtin.yum:
     name:
       - util-linux

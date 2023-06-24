@@ -9,17 +9,16 @@
     purge: true
   notify: "Update apt cache (Debian Family)"
 
-- name: "Ensure gnupg and python3-jmespath is installed (Debian Family)"
+- name: "Ensure gnupg is installed (Debian Family)"
   ansible.builtin.apt:
-    name:
-      - gnupg
+    name: gnupg
     state: present
     update_cache: true
     cache_valid_time: 3600
   when: ansible_os_family == "Debian"
 
 - name: "Add netdata repository"
-  when: netdata_state == "present"
+  when: netdata_agent_state == "present"
   notify: "Update apt cache (Debian Family)"
   block:
     - name: "Ensure netdata repo key is present (Debian Family)"
@@ -27,31 +26,31 @@
         url: https://repo.netdata.cloud/netdatabot.gpg.key
         state: present
 
-    - name: "Ensure netdata repository is configured (Debian Family) [{{ netdata_channel }}]"
+    - name: "Ensure netdata repository is configured (Debian Family) [{{ netdata_agent_channel }}]"
       ansible.builtin.apt_repository:
-        repo: "deb http://repo.netdata.cloud/repos/{{ netdata_channel }}/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
+        repo: "deb http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
         state: present
-        filename: netdata-{{ netdata_channel }}
+        filename: netdata-{{ netdata_agent_channel }}
 
-    - name: "Set fact netdata_channel_remove to edge"
+    - name: "Set fact netdata_agent_channel_remove to edge"
       ansible.builtin.set_fact:
-        netdata_channel_remove: edge
-      when: netdata_channel == "stable"
+        netdata_agent_channel_remove: edge
+      when: netdata_agent_channel == "stable"
 
-    - name: "Set fact netdata_channel_remove to stable"
+    - name: "Set fact netdata_agent_channel_remove to stable"
       ansible.builtin.set_fact:
-        netdata_channel_remove: stable
-      when: netdata_channel == "edge"
+        netdata_agent_channel_remove: stable
+      when: netdata_agent_channel == "edge"
 
-    - name: "Ensure netdata repository is removed (Debian Family) [{{ netdata_channel_remove }}]"
+    - name: "Ensure netdata repository is removed (Debian Family) [{{ netdata_agent_channel_remove }}]"
       ansible.builtin.apt_repository:
-        repo: "deb http://repo.netdata.cloud/repos/{{ netdata_channel_remove }}/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
+        repo: "deb http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
         state: absent
-        filename: netdata-{{ netdata_channel_remove }}
+        filename: netdata-{{ netdata_agent_channel_remove }}
       notify: "Remove netdata"
 
 - name: "Remove netdata repository"
-  when: netdata_state == "absent"
+  when: netdata_agent_state == "absent"
   notify: "Update apt cache (Debian Family)"
   block:
     - name: "Ensure netdata repository is removed (Debian Family) [stable]"

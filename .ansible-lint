@@ -1,0 +1,6 @@
+---
+exclude_paths:
+  - .github
+
+skip_list:
+  - "403"

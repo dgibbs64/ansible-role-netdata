@@ -25,7 +25,6 @@
     name:
       - util-linux
       - openssl
-      - protobuf
     state: present
   when: ansible_os_family == "RedHat"
 

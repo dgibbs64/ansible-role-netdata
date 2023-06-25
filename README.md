@@ -1,6 +1,6 @@
 # netdata
 
-An [Ansible](https://www.ansible.com) role that installs and configures netdata agent for standalone or cloud use.
+An [Ansible](https://www.ansible.com) role that installs and configures <a href="https://www.netdata.cloud">netdata</a> agent for standalone or cloud use.
 
 <p align="center">
   <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/4478206/248550959-b4dc7485-34bb-4915-94dc-25ec4df79a68.jpg" alt="Ansible Netdata"></a>

@@ -56,7 +56,7 @@
         name: netdata-stable
         priority: 50
 
-    - name: "Ensure netdata repository is removed (SUSE) [edge]"
+    - name: "Ensure netdata repository is removed [edge] (SUSE)"
       community.general.zypper_repository:
         repo: https://repo.netdata.cloud/repos/edge/opensuse/{{ ansible_distribution_version }}/{{ ansible_architecture }}/
         description: Netdata edge

@@ -3,9 +3,7 @@
 An [Ansible](https://www.ansible.com) role that installs and configures netdata agent for local or cloud use.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/4478206/202930662-130cf21e-8d0c-4b4d-a9af-82c61b0b62d.png" alt="Ansible Netdata"></a>
-![netdata](https://github.com/dgibbs64/ansible-role-netdata/assets/4478206/a3efe242-9a4d-4505-8bfa-61b2699519e4)
-
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/4478206/248550959-b4dc7485-34bb-4915-94dc-25ec4df79a68.jpg" alt="Ansible Netdata"></a>
 <br>
 </p>
 <p align="center">

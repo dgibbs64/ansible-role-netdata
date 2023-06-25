@@ -1,6 +1,6 @@
 # netdata
 
-An [Ansible](https://www.ansible.com) role that installs and configures netdata agent for local or cloud use.
+An [Ansible](https://www.ansible.com) role that installs and configures netdata agent for standalone or cloud use.
 
 <p align="center">
   <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/4478206/248550959-b4dc7485-34bb-4915-94dc-25ec4df79a68.jpg" alt="Ansible Netdata"></a>
@@ -20,6 +20,12 @@ An [Ansible](https://www.ansible.com) role that installs and configures netdata 
 Requires a <a href="https://www.netdata.cloud">Netdata</a> account to use the cloud features.
 
 ## Role Variables
+
+By default this role will setup netdata agent with the standalone dashboard enabled.
+
+To enable cloud functionality change `netdata_cloud_enable` to `true` and set the `netdata_cloud_claim_token` and `netdata_cloud_claim_room_id` variables. See the [Netdata Cloud documentation](https://learn.netdata.cloud/docs/installing/install-with-a-cicd-provisioning-system/ansible#edit-the-varsmainyml-file) for more information.
+
+To disable the standalone dashboard set `netdata_agent_web_enabled` to `false`. See the [Netdata documentation](https://learn.netdata.cloud/docs/configuring/securing-netdata-agents/) for more information on securing netdata.
 
 ```yaml
 # Netdata cloud

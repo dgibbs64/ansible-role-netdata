@@ -5,14 +5,14 @@
   ansible.builtin.setup:
   when: ansible_facts|default({}) == {}
 
+- name: "Assert"
+  ansible.builtin.import_tasks: assert.yml
+  run_once: true
+  delegate_to: localhost
+
 - name: "Become block"
   become: true
   block:
-    - name: "Assert"
-      delegate_to: localhost
-      run_once: true
-      ansible.builtin.include_tasks: assert.yml
-
     - name: "Remove netdata"
       ansible.builtin.include_tasks: remove.yml
       when: netdata_agent_state == "absent"

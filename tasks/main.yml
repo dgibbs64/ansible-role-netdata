@@ -9,6 +9,8 @@
   become: true
   block:
     - name: "Assert"
+      delegate_to: localhost
+      run_once: true
       ansible.builtin.include_tasks: assert.yml
 
     - name: "Remove netdata"

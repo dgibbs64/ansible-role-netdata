@@ -1,12 +1,12 @@
 ---
-- name: assert | Test if netdata_cloud_enable is set correctly
+- name: "Test if netdata_cloud_enable is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_cloud_enable is defined
       - netdata_cloud_enable is boolean
     quiet: true
 
-- name: assert | Test if netdata_cloud_claim_url is set correctly
+- name: "Test if netdata_cloud_claim_url is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_cloud_claim_url is defined
@@ -14,7 +14,7 @@
     quiet: true
   when: netdata_cloud_enable
 
-- name: assert | Test if netdata_cloud_claim_token is set correctly
+- name: "Test if netdata_cloud_claim_token is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_cloud_claim_token is defined
@@ -22,7 +22,7 @@
     quiet: true
   when: netdata_cloud_enable
 
-- name: assert | Test if netdata_cloud_claim_room_id is set correctly
+- name: "Test if netdata_cloud_claim_room_id is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_cloud_claim_room_id is defined
@@ -30,7 +30,7 @@
     quiet: true
   when: netdata_cloud_enable
 
-- name: assert | Test if netdata_cloud_force_claim is set correctly
+- name: "Test if netdata_cloud_force_claim is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_cloud_force_claim is defined
@@ -38,35 +38,35 @@
     quiet: true
   when: netdata_cloud_enable
 
-- name: assert | Test if netdata_agent_channel is set correctly
+- name: "Test if netdata_agent_channel is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_agent_channel is defined
       - netdata_agent_channel is string
     quiet: true
 
-- name: assert | Test if netdata_agent_state is set correctly
+- name: "Test if netdata_agent_state is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_agent_state is defined
       - netdata_agent_state is string
     quiet: true
 
-- name: assert | Test if netdata_agent_conf_template is set correctly
+- name: "Test if netdata_agent_conf_template is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_agent_conf_template is defined
       - netdata_agent_conf_template is string
     quiet: true
 
-- name: assert | Test if netdata_agent_web_enabled is set correctly
+- name: "Test if netdata_agent_web_enabled is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_agent_web_enabled is defined
       - netdata_agent_web_enabled is boolean
     quiet: true
 
-- name: assert | Test if netdata_agent_web_port is set correctly
+- name: "Test if netdata_agent_web_port is set correctly"
   ansible.builtin.assert:
     that:
       - netdata_agent_web_port is defined

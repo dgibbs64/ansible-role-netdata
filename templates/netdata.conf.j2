@@ -22,7 +22,7 @@
     dbengine multihost disk space = 256
 
 [web]
-{% if netdata_agent_web_enabled is defined and netdata_agent_web_enabled is not none %}
+{% if netdata_agent_web_enabled is defined and netdata_agent_web_enabled %}
     mode = static-threaded
 {% if netdata_agent_web_port is defined and netdata_agent_web_port is not none %}
     default port = {{ netdata_agent_web_port }}

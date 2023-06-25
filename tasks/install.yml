@@ -9,7 +9,7 @@
     home: /var/lib/netdata
     state: present
 
-- name: "Ensure netdata is installed (Debian Family)"
+- name: "Ensure netdata is installed (apt)"
   ansible.builtin.apt:
     name:
       - uuid-runtime
@@ -18,21 +18,32 @@
     state: present
     update_cache: true
     cache_valid_time: 3600
-  when: ansible_os_family == "Debian"
+  when: ansible_pkg_mgr == "apt"
 
-- name: "Ensure netdata dependencies are installed (RedHat Family)"
+- name: "Ensure netdata is installed (yum)"
   ansible.builtin.yum:
     name:
       - util-linux
       - openssl
+      - netdata
     state: present
-  when: ansible_os_family == "RedHat"
+  when: ansible_pkg_mgr == "yum"
 
-- name: "Ensure netdata is installed"
-  ansible.builtin.package:
-    name: netdata
+- name: "Ensure netdata is installed (dnf)"
+  ansible.builtin.yum:
+    name:
+      - util-linux
+      - openssl
+      - netdata
     state: present
-  when: ansible_os_family != "Debian"
+  when: ansible_pkg_mgr == "dnf"
+
+- name: "Ensure netdata is installed (zypper)"
+  community.general.zypper:
+    name:
+      - netdata
+    state: present
+  when: ansible_pkg_mgr == "zypper"
 
 - name: "Ensure netdata is started"
   ansible.builtin.service:

@@ -4,6 +4,7 @@ An [Ansible](https://www.ansible.com) role that installs and configures netdata 
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/4478206/202930662-130cf21e-8d0c-4b4d-a9af-82c61b0b62d.png" alt="Ansible Netdata"></a>
+![netdata](https://github.com/dgibbs64/ansible-role-netdata/assets/4478206/a3efe242-9a4d-4505-8bfa-61b2699519e4)
 
 <br>
 </p>

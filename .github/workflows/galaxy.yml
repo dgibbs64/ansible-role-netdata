@@ -2,11 +2,11 @@
 name: Release to Ansible Galaxy
 on:
   push:
+    paths:
+      - "README.md"
+      - "meta/main.yml"
     tags:
       - "*"
-    paths:
-      - README.md
-      - meta/main.yml
 
 jobs:
   release:

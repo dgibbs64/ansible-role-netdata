@@ -6,6 +6,7 @@ on:
       - "*"
     paths:
       - README.md
+      - meta/main.yml
 
 jobs:
   release:

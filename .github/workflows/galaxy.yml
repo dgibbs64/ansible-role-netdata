@@ -1,12 +1,11 @@
 ---
 name: Release to Ansible Galaxy
 on:
+  workflow_dispatch:
   push:
     paths:
       - "README.md"
       - "meta/main.yml"
-    tags:
-      - "*"
 
 jobs:
   release:

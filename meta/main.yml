@@ -11,9 +11,6 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - all
-    - name: Ubuntu
-      versions:
         - "jammy"
         - "focal"
         - "jammy"

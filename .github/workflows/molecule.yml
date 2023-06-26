@@ -5,6 +5,8 @@ on:
   push:
     branches-ignore:
       - "repo-sync/**"
+      - "main"
+      - "master"
   pull_request:
     branches-ignore:
       - "repo-sync/**"

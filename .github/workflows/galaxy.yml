@@ -1,16 +1,85 @@
 ---
-name: Release to Ansible Galaxy
+name: Ansible Galaxy
 on:
   workflow_dispatch:
   push:
-    paths:
-      - "README.md"
-      - "meta/main.yml"
+    branches:
+      - "main"
+      - "master"
+
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install test dependencies
+        run: pip3 install yamllint
+
+      - name: Run Yamllint
+        run: |
+          yamllint .
+
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@main
+
+  test:
+    name: Test
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - amazonlinux2023
+          - debian10
+          - debian11
+          - debian12
+          - fedora36
+          - fedora37
+          - fedora38
+          - rockylinux8
+          - rockylinux9
+          - ubuntu1804
+          - ubuntu2004
+          - ubuntu2204
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python 3
+        uses: actions/setup-python@v4
+
+      - name: Install test dependencies
+        run: pip3 install molecule-plugins[docker] jmespath
+
+      - name: Secrets to env
+        uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: "${{ toJSON(secrets) }}"
+
+      - name: Run Molecule tests
+        run: molecule test --all
+        env:
+          PY_COLORS: "1"
+          ANSIBLE_FORCE_COLOR: "1"
+          MOLECULE_IMAGE: "${{ matrix.distro }}"
+
   release:
     name: Release
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v3

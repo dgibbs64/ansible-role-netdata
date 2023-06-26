@@ -14,10 +14,14 @@ galaxy_info:
         - all
     - name: Ubuntu
       versions:
-        - all
+        - "jammy"
+        - "focal"
+        - "jammy"
     - name: Debian
       versions:
-        - all
+        - "bookworm"
+        - "bullseye"
+        - "buster"
     - name: EL
       versions:
         - "7"
@@ -25,13 +29,16 @@ galaxy_info:
         - "9"
     - name: Fedora
       versions:
-        - all
+        - "38"
+        - "37"
+        - "36"
     - name: opensuse
       versions:
-        - all
-    - name: Amazon
+        - "15.4"
+        - "15.3"
+    - name: Amazon Linux
       versions:
-        - all
+        - "2023"
 
   galaxy_tags:
     - netdata

@@ -34,8 +34,8 @@ jobs:
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main
 
-  test:
-    name: Test
+  molecule:
+    name: Molecule
     needs: lint
     runs-on: ubuntu-latest
     strategy:
@@ -76,10 +76,10 @@ jobs:
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_IMAGE: "${{ matrix.distro }}"
 
-  release:
-    name: Release
+  Galaxy:
+    name: Galaxy
     runs-on: ubuntu-latest
-    needs: test
+    needs: molecule
     steps:
       - name: Checkout
         uses: actions/checkout@v3

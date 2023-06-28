@@ -4,6 +4,7 @@ extends: default
 rules:
   line-length: disable
   comments: disable
+  braces: disable
 
 ignore: |
   .github

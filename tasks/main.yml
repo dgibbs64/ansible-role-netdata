@@ -40,3 +40,9 @@
     - name: "Claim host"
       ansible.builtin.include_tasks: claim.yml
       when: netdata_agent_state == "present" and netdata_cloud_enable
+
+    - name: "Ensure postfix is enabled on boot"
+      ansible.builtin.service:
+        name: postfix
+        enabled: true
+        state: started

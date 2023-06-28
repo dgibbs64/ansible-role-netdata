@@ -11,6 +11,11 @@
         msg: "Netdata service is stopped"
       when: "'netdata' in services and services['netdata']['state'] == 'stopped'"
 
+    - name: "Check netdata service is enabled"
+      ansible.builtin.fail:
+        msg: "Netdata service is disabled"
+      when: "'netdata' in services and services['netdata']['enabled']"
+
     - name: "Check netdata dashboard port to open"
       ansible.builtin.wait_for:
         host: "{{ inventory_hostname }}"

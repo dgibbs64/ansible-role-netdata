@@ -15,6 +15,10 @@ An [Ansible](https://www.ansible.com) role that installs and configures <a href=
 <a href="https://github.com/dgibbs64/ansible-role-netdata/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/gameservermanagers/docker-steamcmd?style=flat-square" alt="MIT License"></a>
 </p>
 
+## About
+
+<a href="https://www.netdata.cloud">Netdata</a> is a monitoring agent that can be installed on Linux systems to collect metrics and provide a web dashboard for viewing metrics. This role will install or remove netdata agent and can be configured to use the standalone dashboard or the cloud dashboard.
+
 ## Requirements
 
 Requires a <a href="https://www.netdata.cloud">Netdata</a> account to use the cloud features.

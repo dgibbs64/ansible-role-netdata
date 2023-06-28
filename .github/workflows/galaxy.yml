@@ -3,9 +3,6 @@ name: Ansible Galaxy
 on:
   workflow_dispatch:
   push:
-    branches:
-      - "main"
-      - "master"
     tags:
       - "*"
 
@@ -20,11 +17,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Set up Python 3
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
 
       - name: Install test dependencies
         run: pip3 install yamllint
@@ -60,9 +52,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Python 3
-        uses: actions/setup-python@v4
-
       - name: Install test dependencies
         run: pip3 install molecule-plugins[docker] jmespath
 
@@ -85,11 +74,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Set up Python 3
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
 
       - name: Install Ansible
         run: pip3 install ansible-core

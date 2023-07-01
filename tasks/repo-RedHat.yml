@@ -33,7 +33,7 @@
         state: present
         key: https://repo.netdata.cloud/netdatabot.gpg.key
 
-    - name: "Ensure netdata repository is configured (EL Family) [{{ netdata_agent_channel }}]"
+    - name: "Ensure netdata repository is configured (EL Family): {{ netdata_agent_channel }}"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata {{ netdata_agent_channel }}
@@ -59,7 +59,7 @@
         netdata_agent_channel_remove: stable
       when: netdata_agent_channel == "edge"
 
-    - name: "Ensure netdata repository is removed (EL Family) [{{ netdata_agent_channel_remove }}]"
+    - name: "Ensure netdata repository is removed (EL Family): {{ netdata_agent_channel_remove }}"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata {{ netdata_agent_channel_remove }}
@@ -78,7 +78,7 @@
 - name: "Remove netdata repository"
   when: netdata_agent_state == "absent"
   block:
-    - name: "Ensure netdata repository is removed [stable] (EL Family)"
+    - name: "Ensure netdata repository is removed (EL Family): stable"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/stable/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata stable
@@ -93,7 +93,7 @@
         sslcacert: /etc/pki/tls/certs/ca-bundle.crt
         sslverify: true
 
-    - name: "Ensure netdata repository is removed [edge] (EL Family)"
+    - name: "Ensure netdata repository is removed (EL Family): edge"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/edge/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata edge

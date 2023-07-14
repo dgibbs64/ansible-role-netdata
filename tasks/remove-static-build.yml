@@ -18,7 +18,6 @@
       ansible.builtin.command: "/opt/netdata/bin/netdatacli shutdown-agent"
       changed_when: true
       failed_when: false
-      ignore_errors: true
 
     # Native netdata must be removed first for netdata-uninstaller.sh to remove static build
     - name: "Remove native netdata"

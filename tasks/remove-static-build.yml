@@ -14,8 +14,8 @@
         path: /opt/netdata/usr/libexec/netdata/netdata-uninstaller.sh
       register: netdata_opt_uninstaller
 
-    - name: "Kill all netdata processes"
-      ansible.builtin.command: "pkill -u netdata"
+    - name: "Shutdown netdata agent"
+      ansible.builtin.command: "/opt/netdata/bin/netdatacli shutdown-agent"
       changed_when: true
 
     # Native netdata must be removed first for netdata-uninstaller.sh to remove static build

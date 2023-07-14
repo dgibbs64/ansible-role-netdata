@@ -1,0 +1,15 @@
+---
+- name: "Prepare"
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Get kickstart.sh"
+      ansible.builtin.get_url:
+        url: https://my-netdata.io/kickstart.sh
+        dest: /tmp/netdata-kickstart.sh
+        mode: 0755
+
+    - name: "Install netdata static build" # noqa command-instead-of-shell
+      ansible.builtin.shell: /tmp/netdata-kickstart.sh --static-only --force
+      changed_when: true

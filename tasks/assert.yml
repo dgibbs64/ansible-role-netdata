@@ -73,3 +73,10 @@
       - netdata_agent_web_port is integer
     quiet: true
   when: netdata_agent_web_enabled
+
+- name: "Test if netdata_agent_disable_email_notifications is set correctly"
+  ansible.builtin.assert:
+    that:
+      - netdata_agent_disable_email_notifications is defined
+      - netdata_agent_disable_email_notifications is boolean
+    quiet: true

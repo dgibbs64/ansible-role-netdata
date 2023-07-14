@@ -18,7 +18,7 @@
 
     - name: "Install Curl"
       ansible.builtin.package:
-        name: curl
+        name: wget
         state: present
 
     - name: "Install netdata static build" # noqa command-instead-of-shell

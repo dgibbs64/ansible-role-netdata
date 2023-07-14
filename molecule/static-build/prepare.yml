@@ -10,6 +10,11 @@
         dest: /tmp/netdata-kickstart.sh
         mode: 0755
 
+    - name: "Install Curl"
+      ansible.builtin.package:
+        name: curl
+        state: present
+
     - name: "Install netdata static build" # noqa command-instead-of-shell
       ansible.builtin.shell: /tmp/netdata-kickstart.sh --static-only
       changed_when: true

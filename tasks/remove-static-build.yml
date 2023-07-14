@@ -1,0 +1,24 @@
+---
+# This will clear up any static builds of netdata
+# https://learn.netdata.cloud/docs/installing/static-binary-linux-packages
+- name: "Check if /opt/netdata exists"
+  ansible.builtin.stat:
+    path: /opt/netdata
+  register: netdata_opt_dir
+
+- name: "Remove static build"
+  when: netdata_opt_dir.stat.exists
+  block:
+    - name: "Check if /opt/netdata/usr/libexec/netdata/netdata-uninstaller.sh exists"
+      ansible.builtin.stat:
+        path: /opt/netdata/usr/libexec/netdata/netdata-uninstaller.sh
+      register: netdata_opt_uninstaller
+
+    # Native netdata must be removed first for netdata-uninstaller.sh to remove static build
+    - name: "Remove native netdata"
+      ansible.builtin.include_tasks: remove.yml
+
+    - name: "Run netdata-uninstaller.sh"
+      ansible.builtin.command: /opt/netdata/usr/libexec/netdata/netdata-uninstaller.sh --yes --force
+      changed_when: netdata_opt_uninstaller.stat.exists
+      when: netdata_opt_uninstaller.stat.exists

@@ -17,6 +17,9 @@
       ansible.builtin.include_tasks: remove.yml
       when: netdata_agent_state == "absent"
 
+    - name: "Remove netdata static build"
+      ansible.builtin.include_tasks: remove-static-build.yml
+
     - name: "Configure repository (Debian Family)"
       ansible.builtin.include_tasks: repo-Debian.yml
       when: ansible_os_family == "Debian"

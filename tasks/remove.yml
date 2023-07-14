@@ -13,6 +13,7 @@
     name: netdata*
     state: absent
     purge: true
+  failed_when: netdata_removal_result.msg is defined and "No package(s) matching 'netdata*' available" in netdata_removal_result.msg
   when: ansible_os_family == "Debian"
 
 - name: "Ensure netdata is removed (openSUSE)"

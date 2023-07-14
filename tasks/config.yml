@@ -8,5 +8,13 @@
     mode: "0644"
   notify: Restart netdata
 
+- name: "Disable email notifications"
+  ansible.builtin.replace:
+    path: "/usr/lib/netdata/conf.d/health_alarm_notify.conf"
+    regexp: 'SEND_EMAIL="YES"'
+    replace: 'SEND_EMAIL="NO"'
+  notify: Restart netdata
+  when: netdata_disable_email_notifications
+
 - name: "Flush handlers"
   ansible.builtin.meta: flush_handlers

@@ -25,3 +25,8 @@ netdata_agent_web_enabled: true
 netdata_agent_web_port: 19999
 netdata_agent_web_bind_to:
 netdata_agent_web_allow_from:
+
+## Netdata agent will send emails to root@localhost by default
+# It is reccomended to disable email notifications unless local email configured
+# https://learn.netdata.cloud/docs/alerting/notifications/
+netdata_disable_email_notifications: true

@@ -46,6 +46,7 @@ jobs:
           - fedora36
           - fedora37
           - fedora38
+          - opensuseleap15
           - rockylinux8
           - rockylinux9
           - ubuntu1804

@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install test dependencies
         run: pip3 install yamllint
@@ -51,7 +51,7 @@ jobs:
           - ubuntu2204
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install test dependencies
         run: pip3 install molecule-plugins[docker] jmespath
@@ -74,7 +74,7 @@ jobs:
     needs: molecule
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Ansible
         run: pip3 install ansible-core

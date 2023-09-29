@@ -1,0 +1,8 @@
+---
+- name: "Test if netdata_cloud_claim_room_id is set correctly"
+  ansible.builtin.assert:
+    that:
+      - netdata_cloud_claim_room_id is defined
+      - netdata_cloud_claim_room_id is string
+    quiet: true
+  when: netdata_cloud_enable

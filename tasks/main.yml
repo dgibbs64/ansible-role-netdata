@@ -10,6 +10,10 @@
   run_once: true
   delegate_to: localhost
 
+- name: "Assert All"
+  ansible.builtin.import_tasks: assert-all.yml
+  delegate_to: localhost
+
 - name: "Become block"
   become: true
   block:

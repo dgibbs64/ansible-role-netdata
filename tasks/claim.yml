@@ -12,6 +12,15 @@
         name: netdata
         state: restarted
 
+    - name: "Ensure netdata is in a running state"
+      ansible.builtin.service:
+        name: netdata
+        state: started
+      register: netdataservicestatus
+      until: netdataservicestatus.status.ActiveState == "active"
+      retries: 15
+      delay: 20
+
     - name: "Get information about netdata agent"
       ansible.builtin.command: netdatacli aclk-state json
       register: netdata_agent_info

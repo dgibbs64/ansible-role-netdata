@@ -40,9 +40,9 @@ jobs:
           - debian10
           - debian11
           - debian12
-          - fedora36
           - fedora37
           - fedora38
+          - fedora39
           - opensuseleap15
           - rockylinux8
           - rockylinux9

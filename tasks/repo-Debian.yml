@@ -9,6 +9,15 @@
     purge: true
   notify: "Update apt cache (Debian Family)"
 
+- name: "Ensure python3-debian and gnupg is installed (Debian Family)"
+  ansible.builtin.apt:
+    name:
+      - gnupg
+      - python3-debian
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
 - name: "Ensure netdata repository is removed (Debian Family) [Legacy]: stable"
   ansible.builtin.apt_repository:
     repo: "deb http://repo.netdata.cloud/repos/stable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
@@ -25,15 +34,6 @@
   ansible.builtin.apt_key:
     state: absent
     id: 0x6588FDD7B14721FE7C3115E6F9177B5265F56346
-
-- name: "Ensure python3-debian and gnupg is installed (Debian Family)"
-  ansible.builtin.apt:
-    name:
-      - gnupg
-      - python3-debian
-    state: present
-    update_cache: true
-    cache_valid_time: 3600
 
 - name: "Set fact netdata_agent_channel_remove to edge"
   ansible.builtin.set_fact:

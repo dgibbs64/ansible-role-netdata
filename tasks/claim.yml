@@ -12,6 +12,10 @@
         name: netdata
         state: restarted
 
+    - name: "Wait 10 seconds"
+      ansible.builtin.wait_for:
+        timeout: 10
+
     - name: "Ensure netdata is in a running state"
       ansible.builtin.service:
         name: netdata

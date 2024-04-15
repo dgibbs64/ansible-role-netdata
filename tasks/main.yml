@@ -1,7 +1,7 @@
 ---
 # tasks file for netdata
 
-- name: "Gather facts"
+- name: "Gathering facts"
   ansible.builtin.setup:
   when: ansible_facts|default({}) == {}
 

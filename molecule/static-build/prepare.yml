@@ -10,11 +10,11 @@
         dest: /tmp/netdata-kickstart.sh
         mode: 0755
 
-    - name: "Update apt cache"
+    - name: "Update apt cache (Debian Family)"
       ansible.builtin.apt:
         update_cache: true
         cache_valid_time: 3600
-      when: ansible_os_family == "Debian"
+      when: ansible_pkg_mgr == "apt"
 
     - name: "Install Curl"
       ansible.builtin.package:

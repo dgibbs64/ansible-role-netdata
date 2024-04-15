@@ -14,13 +14,13 @@
     state: absent
     purge: true
   failed_when: netdata_removal_result.msg is defined and "No package(s) matching 'netdata*' available" in netdata_removal_result.msg
-  when: ansible_os_family == "Debian"
+  when: ansible_pkg_mgr == "apt"
 
 - name: "Ensure netdata is removed (openSUSE)"
   community.general.zypper:
     name: netdata
     state: absent
-  when: ansible_os_family == "Suse"
+  when: ansible_pkg_mgr == "zypper"
 
 - name: "Ensure netdata is removed"
   ansible.builtin.package:

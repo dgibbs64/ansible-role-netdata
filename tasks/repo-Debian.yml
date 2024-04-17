@@ -7,7 +7,7 @@
       - netdata-repo-edge
     state: absent
     purge: true
-  notify: "Update apt cache (Debian Family)"
+  notify: "Update apt cache"
 
 - name: "Ensure python3-debian and gnupg is installed (Debian Family)"
   ansible.builtin.apt:
@@ -47,7 +47,7 @@
 
 - name: "Add netdata repository"
   when: netdata_agent_state == "present"
-  notify: "Update apt cache (Debian Family)"
+  notify: "Update apt cache"
   block:
     - name: "Ensure netdata repository is configured (Debian Family): {{ netdata_agent_channel }}"
       ansible.builtin.deb822_repository:
@@ -70,7 +70,7 @@
 
 - name: "Remove netdata repository"
   when: netdata_agent_state == "absent"
-  notify: "Update apt cache (Debian Family)"
+  notify: "Update apt cache"
   block:
     - name: "Ensure netdata repository is removed (Debian Family): {{ netdata_agent_channel }}"
       ansible.builtin.deb822_repository:

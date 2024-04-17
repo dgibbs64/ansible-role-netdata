@@ -35,6 +35,7 @@
     that:
       - netdata_agent_channel is defined
       - netdata_agent_channel is string
+      - netdata_agent_channel in ['stable', 'edge']
     quiet: true
 
 - name: "Test if netdata_agent_state is set correctly"
@@ -42,6 +43,7 @@
     that:
       - netdata_agent_state is defined
       - netdata_agent_state is string
+      - netdata_agent_state in ['present', 'absent']
     quiet: true
 
 - name: "Test if netdata_agent_conf_template is set correctly"

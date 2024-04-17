@@ -67,9 +67,9 @@ community.general
 ```yaml
 ---
 - name: Netdata
-hosts: all
-roles:
-- dgibbs64.netdata
+  hosts: all
+  roles:
+    - dgibbs64.netdata
 ```
 
 ## License

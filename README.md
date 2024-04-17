@@ -58,7 +58,7 @@ netdata_agent_web_allow_from:
 
 ## Dependencies
 
-```
+```yaml
 community.general
 ```
 

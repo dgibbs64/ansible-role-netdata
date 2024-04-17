@@ -19,7 +19,7 @@
     name: netdata
     state: absent
 
-- name: "Update apt cache (Debian Family)"
+- name: "Update apt cache"
   become: true
   ansible.builtin.apt:
     update_cache: true

@@ -1,5 +1,5 @@
 ---
-- name: "Set netdata_el_repo_distro (EL Family)"
+- name: "Set netdata_el_repo_distro (Enterprise Linux)"
   ansible.builtin.set_fact:
     netdata_el_repo_distro: el
 
@@ -18,8 +18,8 @@
     netdata_el_repo_distro: amazonlinux
   when: ansible_distribution == "Amazon"
 
-- name: "Ensure netdata-repo is removed (EL Family)"
-  ansible.builtin.yum:
+- name: "Ensure netdata-repo is removed (RedHat Family)"
+  ansible.builtin.package:
     name:
       - netdata-repo
       - netdata-repo-edge
@@ -28,12 +28,12 @@
 - name: "Add netdata repository"
   when: netdata_agent_state == "present"
   block:
-    - name: "Ensure netdata repo key is present (EL Family)"
+    - name: "Ensure netdata repo key is present (RedHat Family)"
       ansible.builtin.rpm_key:
         state: present
         key: https://repo.netdata.cloud/netdatabot.gpg.key
 
-    - name: "Ensure netdata repository is configured (EL Family): {{ netdata_agent_channel }}"
+    - name: "Ensure netdata repository is configured (RedHat Family): {{ netdata_agent_channel }}"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata {{ netdata_agent_channel }}
@@ -59,7 +59,7 @@
         netdata_agent_channel_remove: stable
       when: netdata_agent_channel == "edge"
 
-    - name: "Ensure netdata repository is removed (EL Family): {{ netdata_agent_channel_remove }}"
+    - name: "Ensure netdata repository is removed (RedHat Family): {{ netdata_agent_channel_remove }}"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata {{ netdata_agent_channel_remove }}
@@ -78,7 +78,7 @@
 - name: "Remove netdata repository"
   when: netdata_agent_state == "absent"
   block:
-    - name: "Ensure netdata repository is removed (EL Family): stable"
+    - name: "Ensure netdata repository is removed (RedHat Family): stable"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/stable/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata stable
@@ -93,7 +93,7 @@
         sslcacert: /etc/pki/tls/certs/ca-bundle.crt
         sslverify: true
 
-    - name: "Ensure netdata repository is removed (EL Family): edge"
+    - name: "Ensure netdata repository is removed (RedHat Family): edge"
       ansible.builtin.yum_repository:
         baseurl: https://repo.netdata.cloud/repos/edge/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
         description: Netdata edge
@@ -108,7 +108,7 @@
         sslcacert: /etc/pki/tls/certs/ca-bundle.crt
         sslverify: true
 
-    - name: "Ensure netdata repo key is removed (EL Family)"
+    - name: "Ensure netdata repo key is removed (RedHat Family)"
       ansible.builtin.rpm_key:
         state: absent
         key: https://repo.netdata.cloud/netdatabot.gpg.key

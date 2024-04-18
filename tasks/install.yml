@@ -1,4 +1,10 @@
 ---
+- name: "Install dbus"
+  ansible.builtin.package:
+    name: dbus
+    state: present
+  when: ansible_os_family == "RedHat"
+
 - name: "Ensure netdata service user is present"
   ansible.builtin.user:
     name: netdata

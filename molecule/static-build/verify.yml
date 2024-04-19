@@ -31,3 +31,9 @@
             state: started
             delay: 5
             timeout: 10
+
+        - name: "Check that /opt/netdata directory does not exists"
+          ansible.builtin.stat:
+            path: "/opt/netdata"
+          register: netdata_dir
+          failed_when: netdata_dir.stat.exists

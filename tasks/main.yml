@@ -14,6 +14,9 @@
   ansible.builtin.import_tasks: assert-all.yml
   delegate_to: localhost
 
+- name: "Distro Requirements"
+  ansible.builtin.include_tasks: distro-requirements.yml
+
 - name: "Become block"
   become: true
   block:

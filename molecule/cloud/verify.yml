@@ -3,23 +3,31 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: "Get service facts"
-      ansible.builtin.service_facts:
+    - name: "Check if /tmp/unsupported_distro file exists"
+      ansible.builtin.stat:
+        path: "/tmp/unsupported_distro"
+      register: unsupported_distro_file
 
-    - name: "Check netdata service is started"
-      ansible.builtin.fail:
-        msg: "netdata service is not started"
-      when: "'netdata' in services and services['netdata']['state'] != 'running'"
+    - name: "Verify"
+      when: not unsupported_distro_file.stat.exists
+      block:
+        - name: "Get service facts"
+          ansible.builtin.service_facts:
 
-    - name: "Check netdata service is enabled"
-      ansible.builtin.fail:
-        msg: "netdata service is not enabled"
-      when: "'netdata' in services and services['netdata.service']['status'] != 'enabled'"
+        - name: "Check netdata service is started"
+          ansible.builtin.fail:
+            msg: "netdata service is not started"
+          when: "'netdata' in services and services['netdata']['state'] != 'running'"
 
-    - name: "Check netdata dashboard port to closed"
-      ansible.builtin.wait_for:
-        host: "{{ inventory_hostname }}"
-        port: "19999"
-        state: stopped
-        delay: 5
-        timeout: 10
+        - name: "Check netdata service is enabled"
+          ansible.builtin.fail:
+            msg: "netdata service is not enabled"
+          when: "'netdata' in services and services['netdata.service']['status'] != 'enabled'"
+
+        - name: "Check netdata dashboard port to closed"
+          ansible.builtin.wait_for:
+            host: "{{ inventory_hostname }}"
+            port: "19999"
+            state: stopped
+            delay: 5
+            timeout: 10

@@ -2,7 +2,6 @@
 - name: "Converge"
   hosts: all
   gather_facts: false
-  become: false
   vars:
     netdata_cloud_enable: true
     netdata_cloud_claim_token: this-is-a-test-token

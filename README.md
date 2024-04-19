@@ -21,6 +21,20 @@ An [Ansible](https://www.ansible.com) role that installs and configures <a href=
 
 Requires a <a href="https://www.netdata.cloud">Netdata</a> account to use the cloud features.
 
+### Supported Distros
+
+- AlmaLinux >= 8
+- AmazonLinux 2023
+- CentOS >= 8
+- Debian >= 10
+- Fedora >= 29
+- openSUSE >= 15.4
+- OracleLinux >= 8
+- Pop!\_OS >= 20.04
+- Redhat Enterprise Linux >= 8
+- Rocky Linux >= 8
+- Ubuntu >= 20.04
+
 ## Role Variables
 
 By default this role will setup netdata agent with the standalone dashboard enabled.

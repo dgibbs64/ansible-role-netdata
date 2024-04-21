@@ -1,6 +1,5 @@
 ---
 - name: "Ensure netdata-repo is removed (Debian Family) [Legacy]"
-  become: true
   ansible.builtin.apt:
     name:
       - netdata-repo
@@ -23,17 +22,20 @@
     repo: "deb http://repo.netdata.cloud/repos/stable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
     state: absent
     filename: netdata-stable
+  notify: "Update apt cache"
 
 - name: "Ensure netdata repository is removed (Debian Family) [Legacy]: edge"
   ansible.builtin.apt_repository:
     repo: "deb http://repo.netdata.cloud/repos/edge}/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
     state: absent
     filename: netdata-edge
+  notify: "Update apt cache"
 
 - name: "Ensure netdata repo key is removed from legacy trusted.gpg keyring (Debian Family) [Legacy]"
   ansible.builtin.apt_key:
     state: absent
     id: 0x6588FDD7B14721FE7C3115E6F9177B5265F56346
+  notify: "Update apt cache"
 
 - name: "Set fact netdata_agent_channel_remove to edge"
   ansible.builtin.set_fact:

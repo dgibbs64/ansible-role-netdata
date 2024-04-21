@@ -20,6 +20,16 @@
     cache_valid_time: 3600
   when: ansible_pkg_mgr == "apt"
 
+- name: "Ensure netdata is installed (dnf)"
+  ansible.builtin.dnf:
+    name:
+      - util-linux
+      - openssl
+      - netdata
+    state: present
+    update_cache: true
+  when: ansible_pkg_mgr == "dnf"
+
 - name: "Ensure netdata is installed (yum)"
   ansible.builtin.yum:
     name:
@@ -27,22 +37,15 @@
       - openssl
       - netdata
     state: present
+    update_cache: true
   when: ansible_pkg_mgr == "yum"
-
-- name: "Ensure netdata is installed (dnf)"
-  ansible.builtin.yum:
-    name:
-      - util-linux
-      - openssl
-      - netdata
-    state: present
-  when: ansible_pkg_mgr == "dnf"
 
 - name: "Ensure netdata is installed (zypper)"
   community.general.zypper:
     name:
       - netdata
     state: present
+    update_cache: true
   when: ansible_pkg_mgr == "zypper"
 
 - name: "Ensure netdata is started"

@@ -1,5 +1,5 @@
 ---
-- name: "Check if distro or architecture are supported"
+- name: "Check if distro or architecture is supported"
   ansible.builtin.set_fact:
     distro_supported: false
   when: >
@@ -7,7 +7,7 @@
     ansible_distribution_version is version(supported_distros | selectattr("name", "equalto", ansible_distribution) | map(attribute="min_version") | first, "<") or
     ansible_architecture not in (supported_distros | selectattr("name", "equalto", ansible_distribution) | map(attribute="supported_architectures", default=[]) | first)
 
-- name: "Check if distro or architecture are supported"
+- name: "Display if distro or architecture are supported"
   ansible.builtin.debug:
     msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} on {{ ansible_architecture }} is not supported"
   when: distro_supported is false
@@ -22,5 +22,5 @@
   when: distro_supported is false and "molecule-notest" in ansible_skip_tags
 
 - name: "Skip role if distro or architecture is not supported"
-  ansible.builtin.meta: end_play
+  ansible.builtin.meta: end_host
   when: distro_supported is false

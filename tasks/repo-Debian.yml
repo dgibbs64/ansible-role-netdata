@@ -1,13 +1,4 @@
 ---
-- name: "Ensure netdata-repo is removed (Debian Family) [Legacy]"
-  ansible.builtin.apt:
-    name:
-      - netdata-repo
-      - netdata-repo-edge
-    state: absent
-    purge: true
-  notify: "Update apt cache"
-
 - name: "Ensure python3-debian and gnupg is installed (Debian Family)"
   ansible.builtin.apt:
     name:
@@ -16,6 +7,15 @@
     state: present
     update_cache: true
     cache_valid_time: 3600
+
+- name: "Ensure netdata-repo is removed (Debian Family) [Legacy]"
+  ansible.builtin.apt:
+    name:
+      - netdata-repo
+      - netdata-repo-edge
+    state: absent
+    purge: true
+  notify: "Update apt cache"
 
 - name: "Ensure netdata repository is removed (Debian Family) [Legacy]: stable"
   ansible.builtin.apt_repository:
@@ -35,6 +35,18 @@
   ansible.builtin.apt_key:
     state: absent
     id: 0x6588FDD7B14721FE7C3115E6F9177B5265F56346
+  notify: "Update apt cache"
+
+- name: "Ensure netdata-stable.list is removed [Legacy]"
+  ansible.builtin.file:
+    path: "/etc/apt/sources.list.d/netdata-stable.list"
+    state: absent
+  notify: "Update apt cache"
+
+- name: "Ensure netdata-edge.list is removed [Legacy]"
+  ansible.builtin.file:
+    path: "/etc/apt/sources.list.d/netdata-edge.list"
+    state: absent
   notify: "Update apt cache"
 
 - name: "Set fact netdata_agent_channel_remove to edge"

@@ -45,12 +45,14 @@ jobs:
           - fedora37
           - fedora38
           - fedora39
+          - fedora40
           - opensuseleap15
           - rockylinux8
           - rockylinux9
           - ubuntu1804
           - ubuntu2004
           - ubuntu2204
+          - ubuntu2404
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -13,7 +13,7 @@ netdata_cloud_force_claim: false
 # Channel stable|edge
 netdata_agent_channel: stable
 
-# Agent state present|absent
+# Netdata Agent state present|absent
 netdata_agent_state: present
 
 # netdata.conf template location

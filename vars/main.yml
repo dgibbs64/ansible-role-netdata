@@ -1,4 +1,5 @@
 ---
+# vars file for netdata
 supported_distros:
   - { name: "AlmaLinux", min_version: "8", supported_architectures: "['x86_64', 'aarch64']" }
   - { name: "Amazon", min_version: "2023", supported_architectures: "['x86_64', 'aarch64']" }

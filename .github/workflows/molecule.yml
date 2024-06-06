@@ -29,7 +29,7 @@ jobs:
           yamllint .
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@v24.6.0
+        uses: ansible/ansible-lint@v24.2.3
 
   molecule:
     name: Molecule
@@ -40,26 +40,35 @@ jobs:
       matrix:
         distro:
           - amazonlinux2023
-          - debian10
           - debian11
           - debian12
-          - fedora37
-          - fedora38
           - fedora39
           - fedora40
           - opensuseleap15
           - rockylinux8
           - rockylinux9
-          - ubuntu1804
           - ubuntu2004
           - ubuntu2204
           - ubuntu2404
+        ansible_core_version:
+          - 2.16
+          - latest
+        exclude:
+          - distro: rockylinux8
+            ansible_core_version: latest
+          - distro: opensuseleap15
+            ansible_core_version: latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install test dependencies
-        run: pip3 install molecule-plugins[docker] jmespath
+      - name: Install test dependencies (specific version)
+        run: pip3 install ansible-core==${{ matrix.ansible_core_version }} molecule-plugins[docker] jmespath
+        if: matrix.ansible_core_version != 'latest'
+
+      - name: Install test dependencies (latest version)
+        run: pip3 install ansible-core molecule-plugins[docker] jmespath
+        if: matrix.ansible_core_version == 'latest'
 
       - name: Secrets to env
         uses: oNaiPs/secrets-to-env-action@v1.5

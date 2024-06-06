@@ -4,36 +4,31 @@ galaxy_info:
   company: none
   description: An Ansible role that installs and configures Netdata agent.
   license: MIT
-  min_ansible_version: "2.13"
+  min_ansible_version: "2.16"
   namespace: dgibbs64
   role_name: netdata
 
   platforms:
     - name: Ubuntu
       versions:
+        - "noble"
         - "jammy"
         - "focal"
-        - "bionic"
     - name: Debian
       versions:
         - "bookworm"
         - "bullseye"
-        - "buster"
     - name: EL
       versions:
-        - "7"
-        - "8"
         - "9"
+        - "8"
     - name: Fedora
       versions:
+        - "40"
         - "39"
-        - "38"
-        - "37"
-        - "36"
     - name: opensuse
       versions:
-        - "15.4"
-        - "15.3"
+        - "15.5"
     - name: Amazon Linux
       versions:
         - "2023"

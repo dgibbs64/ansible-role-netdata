@@ -26,13 +26,11 @@
     state: absent
   notify:
     - "Update dnf cache"
-    - "Update yum cache"
 
 - name: "Add netdata repository"
   when: netdata_agent_state == "present"
   notify:
     - "Update dnf cache"
-    - "Update yum cache"
   block:
     - name: "Ensure netdata repo key is present (RedHat Family)"
       ansible.builtin.rpm_key:
@@ -85,7 +83,6 @@
   when: netdata_agent_state == "absent"
   notify:
     - "Update dnf cache"
-    - "Update yum cache"
   block:
     - name: "Ensure netdata repository is removed (RedHat Family): stable"
       ansible.builtin.yum_repository:

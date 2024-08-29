@@ -30,16 +30,6 @@
     update_cache: true
   when: ansible_pkg_mgr == "dnf"
 
-- name: "Ensure netdata is installed (yum)"
-  ansible.builtin.yum:
-    name:
-      - util-linux
-      - openssl
-      - netdata
-    state: present
-    update_cache: true
-  when: ansible_pkg_mgr == "yum"
-
 - name: "Ensure netdata is installed (zypper)"
   community.general.zypper:
     name:

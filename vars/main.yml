@@ -3,7 +3,7 @@
 supported_distros:
   - { name: "AlmaLinux", min_version: "8", supported_architectures: "['x86_64', 'aarch64']" }
   - { name: "Amazon", min_version: "2023", supported_architectures: "['x86_64', 'aarch64']" }
-  - { name: "CentOS", min_version: "7", supported_architectures: "['x86_64']" }
+  - { name: "CentOS", min_version: "8", supported_architectures: "['x86_64']" }
   - { name: "Debian", min_version: "10", supported_architectures: "['x86_64', 'i686', 'aarch64', 'armv7l']" }
   - { name: "Fedora", min_version: "37", supported_architectures: "['x86_64', 'aarch64']" }
   - { name: "openSUSE Leap", min_version: "15.4", supported_architectures: "['x86_64', 'aarch64']" }

@@ -28,7 +28,7 @@ jobs:
           yamllint .
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@v24.7.0
+        uses: ansible/ansible-lint@v24.9.2
 
   molecule:
     name: Molecule

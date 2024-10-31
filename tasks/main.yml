@@ -19,6 +19,7 @@
 
 - name: "Become block"
   become: true
+  when: distro_supported is true
   block:
     - name: "Remove netdata"
       ansible.builtin.include_tasks: remove.yml

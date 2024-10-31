@@ -33,20 +33,20 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - /etc/netdata
-    - /var/log/netdata
-    - /var/lib/netdata
-    - /var/cache/netdata
-    - /usr/libexec/netdata
-    - /usr/lib/netdata
-    - /usr/share/netdata
+    - "/etc/netdata"
+    - "/var/log/netdata"
+    - "/var/lib/netdata"
+    - "/var/cache/netdata"
+    - "/usr/libexec/netdata"
+    - "/usr/lib/netdata"
+    - "/usr/share/netdata"
 
 - name: "Ensure netdata service user is removed"
   ansible.builtin.user:
     name: netdata
     comment: "Netdata Monitoring"
-    shell: /sbin/nologin
+    shell: "/sbin/nologin"
     system: true
     createhome: false
-    home: /var/lib/netdata
+    home: "/var/lib/netdata"
     state: absent

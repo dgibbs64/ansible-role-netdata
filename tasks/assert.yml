@@ -1,10 +1,4 @@
 ---
-- name: "Test if netdata_bypass_distro_check is set correctly"
-  ansible.builtin.assert:
-    that:
-      - netdata_bypass_distro_check is defined
-      - netdata_bypass_distro_check is boolean
-    quiet: true
 
 - name: "Test if netdata_cloud_enable is set correctly"
   ansible.builtin.assert:
@@ -80,4 +74,19 @@
     that:
       - netdata_disable_email_notifications is defined
       - netdata_disable_email_notifications is boolean
+    quiet: true
+
+- name: "Test if netdata_distro_check_bypass is set correctly"
+  ansible.builtin.assert:
+    that:
+      - netdata_distro_check_bypass is defined
+      - netdata_distro_check_bypass is boolean
+    quiet: true
+
+- name: "Test if netdata_distro_check_fail_state is set correctly"
+  ansible.builtin.assert:
+    that:
+      - netdata_distro_check_fail_state is defined
+      - netdata_distro_check_fail_state is string
+      - netdata_distro_check_fail_state in ['end_role', 'end_play', 'end_host']
     quiet: true

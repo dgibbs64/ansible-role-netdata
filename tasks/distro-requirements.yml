@@ -22,5 +22,5 @@
   when: distro_supported is false and "molecule-notest" in ansible_skip_tags
 
 - name: "Skip role if distro or architecture is not supported"
-  ansible.builtin.meta: end_role
+  ansible.builtin.meta: "{{ netdata_distro_check_fail_state }}"
   when: distro_supported is false

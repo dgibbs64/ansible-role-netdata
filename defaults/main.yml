@@ -32,4 +32,8 @@ netdata_agent_web_allow_from:
 netdata_disable_email_notifications: true
 
 # Distro check bypass
-netdata_bypass_distro_check: false
+netdata_distro_check_bypass: false
+
+# Distro check failstate end_role|end_play|end_host
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html#parameter-free_form
+netdata_distro_check_fail_state: end_role

@@ -23,17 +23,18 @@ Requires a <a href="https://www.netdata.cloud">Netdata</a> account to use the cl
 
 ### Supported Distros
 
-- AlmaLinux >= 8
+- AlmaLinux >= 9
 - AmazonLinux 2023
-- CentOS >= 8
-- Debian >= 10
-- Fedora >= 29
-- openSUSE >= 15.4
+- Debian >= 12
+- Fedora >= 41
+- openSUSE >= 15.6
 - OracleLinux >= 8
 - Pop!\_OS >= 20.04
-- Redhat Enterprise Linux >= 8
-- Rocky Linux >= 8
+- Redhat Enterprise Linux >= 9
+- Rocky Linux >= 9
 - Ubuntu >= 20.04
+
+> Note: This role will check the distro and <a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html#parameter-free_form">skip the role</a> if the distro is not supported. This can be bypassed by setting `netdata_distro_check_bypass` to `true`.
 
 ## Role Variables
 

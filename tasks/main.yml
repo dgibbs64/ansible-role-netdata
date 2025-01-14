@@ -17,7 +17,7 @@
 
 - name: "Distro Requirements"
   ansible.builtin.include_tasks: distro-requirements.yml
-  when: netdata_bypass_distro_check is not defined or netdata_bypass_distro_check is false
+  when: netdata_distro_check_bypass is not defined or netdata_distro_check_bypass is false
 
 - name: "Become block"
   become: true

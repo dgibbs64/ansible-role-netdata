@@ -30,3 +30,6 @@ netdata_agent_web_allow_from:
 # It is reccomended to disable email notifications unless local email configured
 # https://learn.netdata.cloud/docs/alerting/notifications/
 netdata_disable_email_notifications: true
+
+# Distro check bypass
+netdata_bypass_distro_check: false

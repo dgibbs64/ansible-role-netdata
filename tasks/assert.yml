@@ -1,4 +1,11 @@
 ---
+- name: "Test if netdata_bypass_distro_check is set correctly"
+  ansible.builtin.assert:
+    that:
+      - netdata_bypass_distro_check is defined
+      - netdata_bypass_distro_check is boolean
+    quiet: true
+
 - name: "Test if netdata_cloud_enable is set correctly"
   ansible.builtin.assert:
     that:

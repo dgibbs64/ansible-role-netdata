@@ -37,3 +37,7 @@ netdata_distro_check_bypass: false
 # Distro check failstate end_role|end_play|end_host
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html#parameter-free_form
 netdata_distro_check_fail_state: end_role
+
+## Netdata package repository
+# Enable automatic updates
+netdata_enable_unattended_upgrades: false

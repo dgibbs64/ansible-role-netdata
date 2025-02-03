@@ -119,5 +119,10 @@
         state: absent
         key: https://repo.netdata.cloud/netdatabot.gpg.key
 
+- name: "Fail if netdata_enable_unattended_upgrades is used on RedHat"
+  ansible.builtin.fail:
+    msg: "netdata_enable_unattended_upgrades is not supported on RedHat-based systems yet."
+  when: netdata_enable_unattended_upgrades
+
 - name: "Flush handlers"
   ansible.builtin.meta: flush_handlers

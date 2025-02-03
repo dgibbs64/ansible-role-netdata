@@ -95,5 +95,23 @@
         state: absent
         enabled: true
 
+- name: "Disable unattended-upgrades for Netdata"
+  when: not netdata_enable_unattended_upgrades
+  ansible.builtin.file:
+    path: "/etc/apt/apt.conf.d/50unattended-upgrades-netdata"
+    state: absent
+
+- name: "Enable unattended-upgrades for Netdata"
+  when: netdata_enable_unattended_upgrades
+  ansible.builtin.copy:
+    dest: "/etc/apt/apt.conf.d/50unattended-upgrades-netdata"
+    content: |
+      Unattended-Upgrade::Origins-Pattern {
+          "origin=Netdata,codename=${distro_codename},label=Netdata";
+      };
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: "Flush handlers"
   ansible.builtin.meta: flush_handlers

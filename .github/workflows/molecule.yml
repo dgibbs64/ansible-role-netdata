@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install test dependencies
         run: pip3 install yamllint
@@ -60,7 +60,7 @@ jobs:
             ansible_core_version: latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install test dependencies (specific version)
         run: pip3 install ansible-core==${{ matrix.ansible_core_version }} molecule-plugins[docker] jmespath

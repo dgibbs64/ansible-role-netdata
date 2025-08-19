@@ -1,5 +1,4 @@
 ---
-
 - name: "Test if netdata_cloud_enable is set correctly"
   ansible.builtin.assert:
     that:

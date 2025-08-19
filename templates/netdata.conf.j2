@@ -1,38 +1,23 @@
- # netdata configuration
- #
- # You can get the latest version of this file, using:
- #
- #  netdatacli dumpconfig > /etc/netdata/netdata.conf
- #
- # You can also download it using:
- #
- #  wget -O /etc/netdata/netdata.conf http://localhost:19999/netdata.conf
- # or
- #  curl -o /etc/netdata/netdata.conf http://localhost:19999/netdata.conf
- #
- # You can uncomment and change any of the options below.
- # The value shown in the commented settings, is the default value.
- #
-
-[global]
-    run as user = netdata
-
-    # default storage size - increase for longer data retention
-    page cache size = 32
-    dbengine multihost disk space = 256
-
+# netdata configuration # # You can get the latest version of this file, using:
+# # netdatacli dumpconfig > /etc/netdata/netdata.conf # # You can also download
+it using: # # wget -O /etc/netdata/netdata.conf
+http://localhost:19999/netdata.conf # or # curl -o /etc/netdata/netdata.conf
+http://localhost:19999/netdata.conf # # You can uncomment and change any of the
+options below. # The value shown in the commented settings, is the default
+value. # [global] run as user = netdata # default storage size - increase for
+longer data retention page cache size = 32 dbengine multihost disk space = 256
 [web]
 {% if netdata_agent_web_enabled is defined and netdata_agent_web_enabled %}
-    mode = static-threaded
-{% if netdata_agent_web_port is defined and netdata_agent_web_port is not none %}
+  mode = static-threaded
+  {% if netdata_agent_web_port is defined and netdata_agent_web_port is not none %}
     default port = {{ netdata_agent_web_port }}
-{% endif %}
-{% if netdata_agent_web_bind_to is defined and netdata_agent_web_bind_to is not none %}
+  {% endif %}
+  {% if netdata_agent_web_bind_to is defined and netdata_agent_web_bind_to is not none %}
     bind to = {{ netdata_agent_web_bind_to }}
-{% endif %}
-{% if netdata_agent_web_allow_from is defined and netdata_agent_web_allow_from is not none %}
+  {% endif %}
+  {% if netdata_agent_web_allow_from is defined and netdata_agent_web_allow_from is not none %}
     allow connections from = {{ netdata_agent_web_allow_from }}
-{% endif %}
+  {% endif %}
 {% else %}
-    mode = none
+  mode = none
 {% endif %}

@@ -1,9 +1,13 @@
 {
   "recommendations": [
-    "redhat.ansible",
+    "DavidAnson.vscode-markdownlint",
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
+    "github.vscode-github-actions",
+    "GitHub.vscode-pull-request-github",
+    "redhat.ansible",
+    "redhat.vscode-yaml",
     "wholroyd.jinja",
-    "redhat.vscode-yaml"
+    "yzhang.markdown-all-in-one"
   ]
 }

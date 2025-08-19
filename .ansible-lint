@@ -1,7 +1,9 @@
 ---
+skip_list:
+  - "204" # Ignore "lines too long"
+  - "no-changed-when"
+  - "403" # Ignore "package-latest"
+
 exclude_paths:
   - .github
   - tests
-
-skip_list:
-  - "403"

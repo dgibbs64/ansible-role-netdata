@@ -1,0 +1,85 @@
+name: Ansible Molecule
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+      - "master"
+  schedule:
+    - cron: "16 0 * * 0"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install test dependencies
+        run: pip3 install yamllint
+
+      - name: Run Yamllint
+        run: |
+          yamllint .
+
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@v25
+
+  molecule:
+    name: Molecule
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - amazonlinux2023
+          - debian11
+          - debian12
+          - fedora39
+          - fedora40
+          - opensuseleap15
+          - rockylinux8
+          - rockylinux9
+          - ubuntu2004
+          - ubuntu2204
+          - ubuntu2404
+        ansible_core_version:
+          - 2.16
+          - latest
+        exclude:
+          - distro: rockylinux8
+            ansible_core_version: latest
+          - distro: opensuseleap15
+            ansible_core_version: latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install test dependencies (specific version)
+        run: pip3 install ansible-core==${{ matrix.ansible_core_version }} molecule-plugins[docker] jmespath
+        if: matrix.ansible_core_version != 'latest'
+
+      - name: Install test dependencies (latest version)
+        run: pip3 install ansible-core molecule-plugins[docker] jmespath
+        if: matrix.ansible_core_version == 'latest'
+
+      - name: Secrets to env
+        uses: oNaiPs/secrets-to-env-action@v1.5
+        with:
+          secrets: "${{ toJSON(secrets) }}"
+
+      - name: Run Molecule tests
+        run: molecule test --all
+        env:
+          PY_COLORS: "1"
+          ANSIBLE_FORCE_COLOR: "1"
+          MOLECULE_IMAGE: "${{ matrix.distro }}"

@@ -69,6 +69,10 @@ netdata_agent_web_enabled: true
 netdata_agent_web_port: 19999
 netdata_agent_web_bind_to:
 netdata_agent_web_allow_from:
+
+## Netdata package repository
+# Enable automatic updates
+netdata_enable_unattended_upgrades: false
 ```
 
 ## Dependencies

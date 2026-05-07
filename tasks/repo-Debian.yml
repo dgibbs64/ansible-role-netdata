@@ -17,24 +17,19 @@
     purge: true
   notify: "Update apt cache"
 
-- name: "Ensure netdata repository is removed (Debian Family) [Legacy]: stable"
-  ansible.builtin.apt_repository:
-    repo: "deb http://repo.netdata.cloud/repos/stable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
+- name: "Ensure legacy netdata repositories are removed (Debian Family) [Legacy]"
+  ansible.builtin.deb822_repository:
+    name: "{{ item }}"
     state: absent
-    filename: netdata-stable
+  loop:
+    - netdata-stable
+    - netdata-edge
   notify: "Update apt cache"
 
-- name: "Ensure netdata repository is removed (Debian Family) [Legacy]: edge"
-  ansible.builtin.apt_repository:
-    repo: "deb http://repo.netdata.cloud/repos/edge}/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
+- name: "Ensure legacy netdata GPG key is removed (Debian Family) [Legacy]"
+  ansible.builtin.file:
+    path: /etc/apt/trusted.gpg.d/netdata.asc
     state: absent
-    filename: netdata-edge
-  notify: "Update apt cache"
-
-- name: "Ensure netdata repo key is removed from legacy trusted.gpg keyring (Debian Family) [Legacy]"
-  ansible.builtin.apt_key:
-    state: absent
-    id: 0x6588FDD7B14721FE7C3115E6F9177B5265F56346
   notify: "Update apt cache"
 
 - name: "Ensure netdata-stable.list is removed [Legacy]"

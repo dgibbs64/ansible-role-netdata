@@ -17,24 +17,19 @@
     purge: true
   notify: "Update apt cache"
 
-- name: "Ensure netdata repository is removed (Debian Family) [Legacy]: stable"
-  ansible.builtin.apt_repository:
-    repo: "deb http://repo.netdata.cloud/repos/stable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
+- name: "Ensure legacy netdata repositories are removed (Debian Family) [Legacy]"
+  ansible.builtin.deb822_repository:
+    name: "{{ item }}"
     state: absent
-    filename: netdata-stable
+  loop:
+    - netdata-stable
+    - netdata-edge
   notify: "Update apt cache"
 
-- name: "Ensure netdata repository is removed (Debian Family) [Legacy]: edge"
-  ansible.builtin.apt_repository:
-    repo: "deb http://repo.netdata.cloud/repos/edge}/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
+- name: "Ensure legacy netdata GPG key is removed (Debian Family) [Legacy]"
+  ansible.builtin.file:
+    path: /etc/apt/trusted.gpg.d/netdata.asc
     state: absent
-    filename: netdata-edge
-  notify: "Update apt cache"
-
-- name: "Ensure netdata repo key is removed from legacy trusted.gpg keyring (Debian Family) [Legacy]"
-  ansible.builtin.apt_key:
-    state: absent
-    id: 0x6588FDD7B14721FE7C3115E6F9177B5265F56346
   notify: "Update apt cache"
 
 - name: "Ensure netdata-stable.list is removed [Legacy]"
@@ -49,15 +44,9 @@
     state: absent
   notify: "Update apt cache"
 
-- name: "Set fact netdata_agent_channel_remove to edge"
+- name: "Determine repository channel to remove (opposite of selected)"
   ansible.builtin.set_fact:
-    netdata_agent_channel_remove: edge
-  when: netdata_agent_channel == "stable"
-
-- name: "Set fact netdata_agent_channel_remove to stable"
-  ansible.builtin.set_fact:
-    netdata_agent_channel_remove: stable
-  when: netdata_agent_channel == "edge"
+    netdata_agent_channel_remove: "{{ 'edge' if netdata_agent_channel == 'stable' else 'stable' }}"
 
 - name: "Add netdata repository"
   when: netdata_agent_state == "present"
@@ -66,18 +55,20 @@
     - name: "Ensure netdata repository is configured (Debian Family): {{ netdata_agent_channel }}"
       ansible.builtin.deb822_repository:
         name: netdata-{{ netdata_agent_channel }}
-        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_distribution | lower }}"
+        types: [deb]
+        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_facts['distribution'] | lower }}"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
-        suites: "{{ ansible_distribution_release | lower }}/"
+        suites: "{{ ansible_facts['distribution_release'] | lower }}/"
         state: present
         enabled: true
 
     - name: "Ensure netdata repository is removed (Debian Family): {{ netdata_agent_channel_remove }}"
       ansible.builtin.deb822_repository:
         name: netdata-{{ netdata_agent_channel_remove }}
-        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_distribution | lower }}"
+        types: [deb]
+        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_facts['distribution'] | lower }}"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
-        suites: "{{ ansible_distribution_release | lower }}/"
+        suites: "{{ ansible_facts['distribution_release'] | lower }}/"
         state: absent
         enabled: true
       notify: "Remove netdata"
@@ -89,9 +80,10 @@
     - name: "Ensure netdata repository is removed (Debian Family): {{ netdata_agent_channel }}"
       ansible.builtin.deb822_repository:
         name: netdata-{{ netdata_agent_channel }}
-        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_distribution | lower }}"
+        types: [deb]
+        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_facts['distribution'] | lower }}"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
-        suites: "{{ ansible_distribution_release | lower }}/"
+        suites: "{{ ansible_facts['distribution_release'] | lower }}/"
         state: absent
         enabled: true
 

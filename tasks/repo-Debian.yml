@@ -17,25 +17,19 @@
     purge: true
   notify: "Update apt cache"
 
-- name: "Ensure old netdata stable apt_repository definition is removed (Legacy)"
-  ansible.builtin.apt_repository:
-    repo: "deb http://repo.netdata.cloud/repos/stable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
+- name: "Ensure legacy netdata repositories are removed (Debian Family) [Legacy]"
+  ansible.builtin.deb822_repository:
+    name: "{{ item }}"
     state: absent
-    filename: netdata-stable
+  loop:
+    - netdata-stable
+    - netdata-edge
   notify: "Update apt cache"
 
-- name: "Ensure old netdata edge apt_repository definition is removed (Legacy)"
-  ansible.builtin.apt_repository:
-    repo: "deb http://repo.netdata.cloud/repos/edge/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
+- name: "Ensure legacy netdata GPG key is removed (Debian Family) [Legacy]"
+  ansible.builtin.file:
+    path: /etc/apt/trusted.gpg.d/netdata.asc
     state: absent
-    filename: netdata-edge
-  notify: "Update apt cache"
-
-- name: "Remove legacy netdata repo key via apt_key when available (Debian <=12)"
-  ansible.builtin.apt_key:
-    state: absent
-    id: 0x6588FDD7B14721FE7C3115E6F9177B5265F56346
-  when: ansible_distribution == "Debian" and (ansible_distribution_major_version | int) < 13
   notify: "Update apt cache"
 
 - name: "Ensure legacy netdata-stable.list is removed"
@@ -54,14 +48,12 @@
   ansible.builtin.set_fact:
     netdata_agent_channel_remove: "{{ 'edge' if netdata_agent_channel == 'stable' else 'stable' }}"
 
-
-
 - name: "Add Netdata repository (deb822) for channel {{ netdata_agent_channel }}"
   ansible.builtin.deb822_repository:
     name: netdata-{{ netdata_agent_channel }}
     types: [deb]
-    uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_distribution | lower }}"
-    suites: "{{ ansible_distribution_release | lower }}/"
+    uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_facts['distribution'] | lower }}"
+    suites: "{{ ansible_facts['distribution_release'] | lower }}/"
     signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
     enabled: true
     state: "{{ 'present' if netdata_agent_state == 'present' else 'absent' }}"
@@ -72,8 +64,8 @@
   ansible.builtin.deb822_repository:
     name: netdata-{{ netdata_agent_channel_remove }}
     types: [deb]
-    uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_distribution | lower }}"
-    suites: "{{ ansible_distribution_release | lower }}/"
+    uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_facts['distribution'] | lower }}"
+    suites: "{{ ansible_facts['distribution_release'] | lower }}/"
     signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
     enabled: true
     state: absent
@@ -89,8 +81,8 @@
       ansible.builtin.deb822_repository:
         name: netdata-stable
         types: [deb]
-        uris: "http://repo.netdata.cloud/repos/stable/{{ ansible_distribution | lower }}"
-        suites: "{{ ansible_distribution_release | lower }}/"
+        uris: "http://repo.netdata.cloud/repos/stable/{{ ansible_facts['distribution'] | lower }}"
+        suites: "{{ ansible_facts['distribution_release'] | lower }}/"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
         enabled: true
         state: absent
@@ -98,8 +90,8 @@
       ansible.builtin.deb822_repository:
         name: netdata-edge
         types: [deb]
-        uris: "http://repo.netdata.cloud/repos/edge/{{ ansible_distribution | lower }}"
-        suites: "{{ ansible_distribution_release | lower }}/"
+        uris: "http://repo.netdata.cloud/repos/edge/{{ ansible_facts['distribution'] | lower }}"
+        suites: "{{ ansible_facts['distribution_release'] | lower }}/"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
         enabled: true
         state: absent

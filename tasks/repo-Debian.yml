@@ -44,15 +44,9 @@
     state: absent
   notify: "Update apt cache"
 
-- name: "Set fact netdata_agent_channel_remove to edge"
+- name: "Determine repository channel to remove (opposite of selected)"
   ansible.builtin.set_fact:
-    netdata_agent_channel_remove: edge
-  when: netdata_agent_channel == "stable"
-
-- name: "Set fact netdata_agent_channel_remove to stable"
-  ansible.builtin.set_fact:
-    netdata_agent_channel_remove: stable
-  when: netdata_agent_channel == "edge"
+    netdata_agent_channel_remove: "{{ 'edge' if netdata_agent_channel == 'stable' else 'stable' }}"
 
 - name: "Add netdata repository"
   when: netdata_agent_state == "present"
@@ -61,6 +55,7 @@
     - name: "Ensure netdata repository is configured (Debian Family): {{ netdata_agent_channel }}"
       ansible.builtin.deb822_repository:
         name: netdata-{{ netdata_agent_channel }}
+        types: [deb]
         uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_facts['distribution'] | lower }}"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
         suites: "{{ ansible_facts['distribution_release'] | lower }}/"
@@ -70,6 +65,7 @@
     - name: "Ensure netdata repository is removed (Debian Family): {{ netdata_agent_channel_remove }}"
       ansible.builtin.deb822_repository:
         name: netdata-{{ netdata_agent_channel_remove }}
+        types: [deb]
         uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_facts['distribution'] | lower }}"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
         suites: "{{ ansible_facts['distribution_release'] | lower }}/"
@@ -84,6 +80,7 @@
     - name: "Ensure netdata repository is removed (Debian Family): {{ netdata_agent_channel }}"
       ansible.builtin.deb822_repository:
         name: netdata-{{ netdata_agent_channel }}
+        types: [deb]
         uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_facts['distribution'] | lower }}"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
         suites: "{{ ansible_facts['distribution_release'] | lower }}/"

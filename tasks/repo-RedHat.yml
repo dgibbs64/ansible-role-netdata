@@ -53,15 +53,9 @@
         sslverify: true
 
     # Ensure that either stable or edge repo is removed
-    - name: "Set fact netdata_agent_channel_remove to edge"
+    - name: "Determine repository channel to remove (opposite of selected)"
       ansible.builtin.set_fact:
-        netdata_agent_channel_remove: edge
-      when: netdata_agent_channel == "stable"
-
-    - name: "Set fact netdata_agent_channel_remove to stable"
-      ansible.builtin.set_fact:
-        netdata_agent_channel_remove: stable
-      when: netdata_agent_channel == "edge"
+        netdata_agent_channel_remove: "{{ 'edge' if netdata_agent_channel == 'stable' else 'stable' }}"
 
     - name: "Ensure netdata repository is removed (RedHat Family): {{ netdata_agent_channel_remove }}"
       ansible.builtin.yum_repository:

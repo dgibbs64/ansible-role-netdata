@@ -26,7 +26,7 @@
   ansible.builtin.package:
     name: netdata*
     state: absent
-  when: ansible_os_family != "Debian" or ansible_os_family != "Suse"
+  when: ansible_facts['os_family'] != "Debian" and ansible_facts['os_family'] != "Suse"
 
 - name: "Remove remaining netdata files"
   ansible.builtin.file:

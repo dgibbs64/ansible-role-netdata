@@ -61,18 +61,18 @@
     - name: "Ensure netdata repository is configured (Debian Family): {{ netdata_agent_channel }}"
       ansible.builtin.deb822_repository:
         name: netdata-{{ netdata_agent_channel }}
-        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_distribution | lower }}"
+        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_facts['distribution'] | lower }}"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
-        suites: "{{ ansible_distribution_release | lower }}/"
+        suites: "{{ ansible_facts['distribution_release'] | lower }}/"
         state: present
         enabled: true
 
     - name: "Ensure netdata repository is removed (Debian Family): {{ netdata_agent_channel_remove }}"
       ansible.builtin.deb822_repository:
         name: netdata-{{ netdata_agent_channel_remove }}
-        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_distribution | lower }}"
+        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_facts['distribution'] | lower }}"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
-        suites: "{{ ansible_distribution_release | lower }}/"
+        suites: "{{ ansible_facts['distribution_release'] | lower }}/"
         state: absent
         enabled: true
       notify: "Remove netdata"
@@ -84,9 +84,9 @@
     - name: "Ensure netdata repository is removed (Debian Family): {{ netdata_agent_channel }}"
       ansible.builtin.deb822_repository:
         name: netdata-{{ netdata_agent_channel }}
-        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_distribution | lower }}"
+        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_facts['distribution'] | lower }}"
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
-        suites: "{{ ansible_distribution_release | lower }}/"
+        suites: "{{ ansible_facts['distribution_release'] | lower }}/"
         state: absent
         enabled: true
 

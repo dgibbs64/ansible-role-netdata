@@ -6,17 +6,17 @@
 - name: "Set netdata_el_repo_distro (Oracle Linux)"
   ansible.builtin.set_fact:
     netdata_el_repo_distro: ol
-  when: ansible_distribution == "OracleLinux"
+  when: ansible_facts['distribution'] == "OracleLinux"
 
 - name: "Set netdata_el_repo_distro (Fedora)"
   ansible.builtin.set_fact:
     netdata_el_repo_distro: fedora
-  when: ansible_distribution == "Fedora"
+  when: ansible_facts['distribution'] == "Fedora"
 
 - name: "Set netdata_el_repo_distro (Amazon Linux)"
   ansible.builtin.set_fact:
     netdata_el_repo_distro: amazonlinux
-  when: ansible_distribution == "Amazon"
+  when: ansible_facts['distribution'] == "Amazon"
 
 - name: "Ensure netdata-repo is removed (RedHat Family)"
   ansible.builtin.package:
@@ -39,7 +39,7 @@
 
     - name: "Ensure netdata repository is configured (RedHat Family): {{ netdata_agent_channel }}"
       ansible.builtin.yum_repository:
-        baseurl: https://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
+        baseurl: https://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ netdata_el_repo_distro }}/{{ ansible_facts['distribution_major_version'] }}/{{ ansible_facts['architecture'] }}/
         description: Netdata {{ netdata_agent_channel }}
         state: present
         enabled: true
@@ -65,7 +65,7 @@
 
     - name: "Ensure netdata repository is removed (RedHat Family): {{ netdata_agent_channel_remove }}"
       ansible.builtin.yum_repository:
-        baseurl: https://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
+        baseurl: https://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ netdata_el_repo_distro }}/{{ ansible_facts['distribution_major_version'] }}/{{ ansible_facts['architecture'] }}/
         description: Netdata {{ netdata_agent_channel_remove }}
         state: absent
         enabled: true
@@ -86,7 +86,7 @@
   block:
     - name: "Ensure netdata repository is removed (RedHat Family): stable"
       ansible.builtin.yum_repository:
-        baseurl: https://repo.netdata.cloud/repos/stable/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
+        baseurl: https://repo.netdata.cloud/repos/stable/{{ netdata_el_repo_distro }}/{{ ansible_facts['distribution_major_version'] }}/{{ ansible_facts['architecture'] }}/
         description: Netdata stable
         state: absent
         enabled: true
@@ -101,7 +101,7 @@
 
     - name: "Ensure netdata repository is removed (RedHat Family): edge"
       ansible.builtin.yum_repository:
-        baseurl: https://repo.netdata.cloud/repos/edge/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/
+        baseurl: https://repo.netdata.cloud/repos/edge/{{ netdata_el_repo_distro }}/{{ ansible_facts['distribution_major_version'] }}/{{ ansible_facts['architecture'] }}/
         description: Netdata edge
         state: absent
         enabled: true

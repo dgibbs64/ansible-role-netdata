@@ -76,6 +76,7 @@
 
 - name: "Remove Netdata repository when state=absent (ensure both channels gone)"
   when: netdata_agent_state == "absent"
+  notify: "Update apt cache"
   block:
     - name: "Remove stable repository (deb822)"
       ansible.builtin.deb822_repository:
@@ -95,7 +96,6 @@
         signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
         enabled: true
         state: absent
-  notify: "Update apt cache"
 
 - name: "Disable unattended-upgrades for Netdata"
   when: not netdata_enable_unattended_upgrades

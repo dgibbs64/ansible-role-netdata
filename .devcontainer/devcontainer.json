@@ -2,6 +2,7 @@
   "name": "Ansible Dev Container",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
     "ghcr.io/devcontainers-community/npm-features/prettier:1": {
       "plugins": "prettier-plugin-sh prettier-plugin-jinja-template"
     },
@@ -11,7 +12,11 @@
     "ghcr.io/devcontainers-extra/features/markdownlint-cli:1": {},
     "ghcr.io/devcontainers-extra/features/shellcheck:1": {},
     "ghcr.io/devcontainers-extra/features/yamllint:2": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {}
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers-extra/features/act:1": {}
+  },
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
   },
   "customizations": {
     "vscode": {
@@ -28,5 +33,5 @@
       ]
     }
   },
-  "postCreateCommand": "npm init -y >/dev/null 2>&1 || true && npm install --no-save prettier prettier-plugin-sh prettier-plugin-jinja-template"
+  "postCreateCommand": "npm init -y >/dev/null 2>&1 || true && npm install --no-save prettier prettier-plugin-sh prettier-plugin-jinja-template && sudo apt-get update && sudo apt-get install -y ripgrep && python3 -m pip install --user --break-system-packages molecule molecule-plugins[docker] jmespath passlib ansible-lint"
 }

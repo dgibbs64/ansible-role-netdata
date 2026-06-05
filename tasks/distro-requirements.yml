@@ -7,13 +7,13 @@
   ansible.builtin.set_fact:
     distro_supported: false
   when: >
-    supported_distros | selectattr("name", "equalto", ansible_distribution) | list | length == 0 or
-    ansible_distribution_version is version(supported_distros | selectattr("name", "equalto", ansible_distribution) | map(attribute="min_version") | first, "<") or
-    ansible_architecture not in (supported_distros | selectattr("name", "equalto", ansible_distribution) | map(attribute="supported_architectures", default=[]) | first)
+    supported_distros | selectattr("name", "equalto", ansible_facts['distribution']) | list | length == 0 or
+    ansible_facts['distribution_version'] is version(supported_distros | selectattr("name", "equalto", ansible_facts['distribution']) | map(attribute="min_version") | first, "<") or
+    ansible_facts['architecture'] not in (supported_distros | selectattr("name", "equalto", ansible_facts['distribution']) | map(attribute="supported_architectures", default=[]) | first)
 
 - name: "Display if distro or architecture is not supported"
   ansible.builtin.debug:
-    msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} on {{ ansible_architecture }} is not supported"
+    msg: "{{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }} on {{ ansible_facts['architecture'] }} is not supported"
   when: distro_supported is false
 
 # For molecule testing only
@@ -26,5 +26,14 @@
   when: distro_supported is false and "molecule-notest" in ansible_skip_tags
 
 - name: "Skip role if distro or architecture is not supported"
-  ansible.builtin.meta: "{{ netdata_distro_check_fail_state }}"
   when: distro_supported is false
+  block:
+    - name: "End role"
+      ansible.builtin.meta: end_role
+      when: netdata_distro_check_fail_state == "end_role"
+    - name: "End play"
+      ansible.builtin.meta: end_play
+      when: netdata_distro_check_fail_state == "end_play"
+    - name: "End host"
+      ansible.builtin.meta: end_host
+      when: netdata_distro_check_fail_state == "end_host"

@@ -32,15 +32,15 @@
 
     - name: "Configure repository (Debian Family)"
       ansible.builtin.include_tasks: repo-Debian.yml
-      when: ansible_os_family == "Debian"
+      when: ansible_facts['os_family'] == "Debian"
 
     - name: "Configure repository (EL Family)"
       ansible.builtin.include_tasks: repo-RedHat.yml
-      when: ansible_os_family == "RedHat"
+      when: ansible_facts['os_family'] == "RedHat"
 
     - name: "Configure repository (Suse)"
       ansible.builtin.include_tasks: repo-Suse.yml
-      when: ansible_os_family == "Suse"
+      when: ansible_facts['os_family'] == "Suse"
 
     - name: "Install"
       ansible.builtin.include_tasks: install.yml

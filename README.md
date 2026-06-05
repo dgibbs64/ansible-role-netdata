@@ -7,7 +7,6 @@ An [Ansible](https://www.ansible.com) role that installs and configures <a href=
 <br>
 </p>
 <p align="center">
-<a href="https://app.codacy.com/gh/dgibbs64/ansible-role-netdata"><img src="https://img.shields.io/codacy/grade/1a892d499efd4dabb73beffa8d64ed01?logo=codacy&style=flat-square" alt="Codacy grade"></a>
 <a href="https://github.com/dgibbs64/ansible-role-netdata/actions/workflows/action-molecule.yml"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/dgibbs64/ansible-role-netdata/action-molecule.yml?label=molecule&logo=ansible&style=flat-square"></a>
 <a href="https://galaxy.ansible.com/dgibbs64/netdata"><img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/dgibbs64/ansible-role-netdata?color=EE0000&label=release&logo=ansible&style=flat-square"></a>
 <a href="https://github.com/dgibbs64/ansible-role-netdata/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/dgibbs64/ansible-role-netdata?style=flat-square" alt="MIT License"></a>
@@ -26,6 +25,7 @@ Requires a <a href="https://www.netdata.cloud">Netdata</a> account to use the cl
 - AlmaLinux >= 9
 - AmazonLinux 2023
 - Debian >= 12
+- Debian 13 (Trixie)
 - Fedora >= 41
 - openSUSE >= 15.6
 - OracleLinux >= 8
@@ -70,8 +70,18 @@ netdata_agent_web_port: 19999
 netdata_agent_web_bind_to:
 netdata_agent_web_allow_from:
 
+# Distro check bypass
+netdata_distro_check_bypass: false
+
+# Distro check failstate end_role|end_play|end_host
+netdata_distro_check_fail_state: end_role
+
+## Netdata agent email notifications
+# Recommended to disable unless local email is configured
+netdata_disable_email_notifications: true
+
 ## Netdata package repository
-# Enable automatic updates
+# Enable automatic updates (Debian family only)
 netdata_enable_unattended_upgrades: false
 ```
 

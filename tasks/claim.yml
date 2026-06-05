@@ -38,7 +38,7 @@
 # Room ID
 - name: "Check room_id matches"
   block:
-    - name: "Ensure that netdata_cloud_claim_room_id matches the stored host room_id"
+    - name: "Ensure netdata_cloud_claim_room_id matches the stored host room_id"
       ansible.builtin.lineinfile:
         dest: /etc/netdata/room_id
         line: "{{ netdata_cloud_claim_room_id }}"

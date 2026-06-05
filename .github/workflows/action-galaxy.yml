@@ -60,8 +60,6 @@ jobs:
         exclude:
           - distro: rockylinux8
             ansible_core_version: latest
-          - distro: opensuseleap15
-            ansible_core_version: latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6

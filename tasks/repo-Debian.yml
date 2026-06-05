@@ -1,5 +1,5 @@
 ---
-- name: "Ensure python3-debian and gnupg is installed (Debian Family)"
+- name: "Ensure python3-debian and gnupg are installed (Debian Family)"
   ansible.builtin.apt:
     name:
       - gnupg
@@ -8,7 +8,7 @@
     update_cache: true
     cache_valid_time: 3600
 
-- name: "Ensure netdata-repo is removed (Debian Family) [Legacy]"
+- name: "Ensure legacy netdata-repo packages are removed (Debian Family)"
   ansible.builtin.apt:
     name:
       - netdata-repo
@@ -17,83 +17,93 @@
     purge: true
   notify: "Update apt cache"
 
-- name: "Ensure netdata repository is removed (Debian Family) [Legacy]: stable"
+- name: "Ensure old netdata stable apt_repository definition is removed (Legacy)"
   ansible.builtin.apt_repository:
     repo: "deb http://repo.netdata.cloud/repos/stable/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
     state: absent
     filename: netdata-stable
   notify: "Update apt cache"
 
-- name: "Ensure netdata repository is removed (Debian Family) [Legacy]: edge"
+- name: "Ensure old netdata edge apt_repository definition is removed (Legacy)"
   ansible.builtin.apt_repository:
-    repo: "deb http://repo.netdata.cloud/repos/edge}/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
+    repo: "deb http://repo.netdata.cloud/repos/edge/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release | lower }}/"
     state: absent
     filename: netdata-edge
   notify: "Update apt cache"
 
-- name: "Ensure netdata repo key is removed from legacy trusted.gpg keyring (Debian Family) [Legacy]"
+- name: "Remove legacy netdata repo key via apt_key when available (Debian <=12)"
   ansible.builtin.apt_key:
     state: absent
     id: 0x6588FDD7B14721FE7C3115E6F9177B5265F56346
+  when: ansible_distribution == "Debian" and (ansible_distribution_major_version | int) < 13
   notify: "Update apt cache"
 
-- name: "Ensure netdata-stable.list is removed [Legacy]"
+- name: "Ensure legacy netdata-stable.list is removed"
   ansible.builtin.file:
     path: "/etc/apt/sources.list.d/netdata-stable.list"
     state: absent
   notify: "Update apt cache"
 
-- name: "Ensure netdata-edge.list is removed [Legacy]"
+- name: "Ensure legacy netdata-edge.list is removed"
   ansible.builtin.file:
     path: "/etc/apt/sources.list.d/netdata-edge.list"
     state: absent
   notify: "Update apt cache"
 
-- name: "Set fact netdata_agent_channel_remove to edge"
+- name: "Determine repository channel to remove (opposite of selected)"
   ansible.builtin.set_fact:
-    netdata_agent_channel_remove: edge
-  when: netdata_agent_channel == "stable"
+    netdata_agent_channel_remove: "{{ 'edge' if netdata_agent_channel == 'stable' else 'stable' }}"
 
-- name: "Set fact netdata_agent_channel_remove to stable"
-  ansible.builtin.set_fact:
-    netdata_agent_channel_remove: stable
-  when: netdata_agent_channel == "edge"
 
-- name: "Add netdata repository"
+
+- name: "Add Netdata repository (deb822) for channel {{ netdata_agent_channel }}"
+  ansible.builtin.deb822_repository:
+    name: netdata-{{ netdata_agent_channel }}
+    types: [deb]
+    uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_distribution | lower }}"
+    suites: "{{ ansible_distribution_release | lower }}/"
+    signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
+    enabled: true
+    state: "{{ 'present' if netdata_agent_state == 'present' else 'absent' }}"
+  when: netdata_agent_state in ['present', 'absent']
+  notify: "Update apt cache"
+
+- name: "Ensure opposite channel repository is removed (deb822)"
+  ansible.builtin.deb822_repository:
+    name: netdata-{{ netdata_agent_channel_remove }}
+    types: [deb]
+    uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_distribution | lower }}"
+    suites: "{{ ansible_distribution_release | lower }}/"
+    signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
+    enabled: true
+    state: absent
   when: netdata_agent_state == "present"
-  notify: "Update apt cache"
-  block:
-    - name: "Ensure netdata repository is configured (Debian Family): {{ netdata_agent_channel }}"
-      ansible.builtin.deb822_repository:
-        name: netdata-{{ netdata_agent_channel }}
-        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_distribution | lower }}"
-        signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
-        suites: "{{ ansible_distribution_release | lower }}/"
-        state: present
-        enabled: true
+  notify:
+    - "Remove netdata"
+    - "Update apt cache"
 
-    - name: "Ensure netdata repository is removed (Debian Family): {{ netdata_agent_channel_remove }}"
-      ansible.builtin.deb822_repository:
-        name: netdata-{{ netdata_agent_channel_remove }}
-        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel_remove }}/{{ ansible_distribution | lower }}"
-        signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
-        suites: "{{ ansible_distribution_release | lower }}/"
-        state: absent
-        enabled: true
-      notify: "Remove netdata"
-
-- name: "Remove netdata repository"
+- name: "Remove Netdata repository when state=absent (ensure both channels gone)"
   when: netdata_agent_state == "absent"
-  notify: "Update apt cache"
   block:
-    - name: "Ensure netdata repository is removed (Debian Family): {{ netdata_agent_channel }}"
+    - name: "Remove stable repository (deb822)"
       ansible.builtin.deb822_repository:
-        name: netdata-{{ netdata_agent_channel }}
-        uris: "http://repo.netdata.cloud/repos/{{ netdata_agent_channel }}/{{ ansible_distribution | lower }}"
-        signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
+        name: netdata-stable
+        types: [deb]
+        uris: "http://repo.netdata.cloud/repos/stable/{{ ansible_distribution | lower }}"
         suites: "{{ ansible_distribution_release | lower }}/"
-        state: absent
+        signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
         enabled: true
+        state: absent
+    - name: "Remove edge repository (deb822)"
+      ansible.builtin.deb822_repository:
+        name: netdata-edge
+        types: [deb]
+        uris: "http://repo.netdata.cloud/repos/edge/{{ ansible_distribution | lower }}"
+        suites: "{{ ansible_distribution_release | lower }}/"
+        signed_by: "https://repo.netdata.cloud/netdatabot.gpg.key"
+        enabled: true
+        state: absent
+  notify: "Update apt cache"
 
 - name: "Flush handlers"
   ansible.builtin.meta: flush_handlers

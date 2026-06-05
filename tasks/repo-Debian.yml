@@ -54,8 +54,6 @@
   ansible.builtin.set_fact:
     netdata_agent_channel_remove: "{{ 'edge' if netdata_agent_channel == 'stable' else 'stable' }}"
 
-
-
 - name: "Add Netdata repository (deb822) for channel {{ netdata_agent_channel }}"
   ansible.builtin.deb822_repository:
     name: netdata-{{ netdata_agent_channel }}

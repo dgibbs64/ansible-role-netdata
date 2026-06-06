@@ -24,6 +24,7 @@
   loop:
     - netdata-stable
     - netdata-edge
+  when: item != ("netdata-" + netdata_agent_channel)
   notify: "Update apt cache"
 
 - name: "Ensure legacy netdata GPG key is removed (Debian Family) [Legacy]"

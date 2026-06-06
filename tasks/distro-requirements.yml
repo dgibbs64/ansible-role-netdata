@@ -26,13 +26,19 @@
   when: distro_supported is false and "molecule-notest" in ansible_skip_tags
 
 - name: "End role if distro or architecture is not supported"
-  meta: end_role
+  tags:
+    - molecule-notest
+  ansible.builtin.meta: end_role
   when: distro_supported is false and netdata_distro_check_fail_state == "end_role"
 
 - name: "End play if distro or architecture is not supported"
-  meta: end_play
+  tags:
+    - molecule-notest
+  ansible.builtin.meta: end_play
   when: distro_supported is false and netdata_distro_check_fail_state == "end_play"
 
 - name: "End host if distro or architecture is not supported"
-  meta: end_host
+  tags:
+    - molecule-notest
+  ansible.builtin.meta: end_host
   when: distro_supported is false and netdata_distro_check_fail_state == "end_host"

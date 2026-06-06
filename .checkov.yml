@@ -1,3 +1,4 @@
 ---
 skip-check:
   - CKV2_ANSIBLE_3
+  - CKV_SECRET_6

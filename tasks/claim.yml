@@ -1,5 +1,5 @@
 ---
-- name: "Get information about netdata agent"
+- name: "Check current netdata claim state"
   tags:
     - molecule-notest
   when: not netdata_cloud_force_claim
@@ -27,7 +27,7 @@
       retries: 15
       delay: 20
 
-    - name: "Get information about netdata agent"
+    - name: "Re-check netdata agent claim state after restart"
       ansible.builtin.command: netdatacli aclk-state json
       register: netdata_agent_info
       changed_when: false
@@ -58,7 +58,7 @@
         group: "root"
         mode: "0644"
 
-    - name: "Ensure netdata_cloud_claim_room_id is added to /etc/netdata/room_id"
+    - name: "Ensure netdata_cloud_claim_room_id is added to /etc/netdata/room_id (missing file)"
       ansible.builtin.lineinfile:
         dest: /etc/netdata/room_id
         line: "{{ netdata_cloud_claim_room_id }}"
@@ -81,20 +81,23 @@
       ansible.builtin.command: uuidgen
       register: netdata_uuidgen
       changed_when: true
-      tags: "molecule-notest"
+      tags:
+        - molecule-notest
 
     - name: "Set fact netdata_uuid"
       ansible.builtin.set_fact:
         netdata_uuid: "{{ netdata_uuidgen.stdout }}"
-      tags: "molecule-notest"
+      tags:
+        - molecule-notest
 
     - name: "Claim the node"
       ansible.builtin.command: netdata-claim.sh -token="{{ netdata_cloud_claim_token }}" -rooms="{{ netdata_cloud_claim_room_id }}" -url="{{ netdata_cloud_claim_url }}" -id="{{ netdata_uuid }}"
       notify: Restart netdata
       changed_when: true
-      tags: "molecule-notest"
+      tags:
+        - molecule-notest
 
-    - name: "Ensure netdata_cloud_claim_room_id is added to /etc/netdata/room_id"
+    - name: "Ensure netdata_cloud_claim_room_id is recorded after claiming the node"
       ansible.builtin.lineinfile:
         dest: /etc/netdata/room_id
         line: "{{ netdata_cloud_claim_room_id }}"
